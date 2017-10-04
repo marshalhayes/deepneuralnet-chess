@@ -2,8 +2,7 @@
 
 **Installation**
 According to your system, install the following packages:
-  1. [tensorflow](https://www.tensorflow.org/install/)
-  2. python
+  - [tensorflow](https://www.tensorflow.org/install/) 
   
 **Downloading dataset**
 Due to the massive dataset of 200,000,000+ Chess games, I have created a script that can auto-download the entire ~40GB (compressed) dataset...To download the dataset, run import.sh from data/

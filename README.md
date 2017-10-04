@@ -2,7 +2,7 @@
 
 **Installation**
 According to your system, install the following packages:
-  1. tensorflow
+  1. [tensorflow](https://www.tensorflow.org/install/)
   2. python
   
 **Downloading dataset**

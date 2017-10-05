@@ -6,6 +6,7 @@ According to your system, install the following packages:
     - [tensorflow](https://www.tensorflow.org/install/)
     - [gloud sdk](https://cloud.google.com/sdk/)
   - optional:
+    - wget
     - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
   
 **Steps taken to produce this model**

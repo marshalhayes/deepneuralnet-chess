@@ -11,7 +11,7 @@ According to your system, install the following packages:
 1. install tensorflow
 2. download lichess dataset 
 3. install pgn-extract
-    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at each move. You can download the pgn-extract tool (here)[https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
+    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at each move. You can download the pgn-extract tool [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
     
 **Manipulating the lichess dataset using pgn-extract**
 By using the pgn-extract package, I was able to get the FEN string for each position after every individual move. Most of the FENs are unnecessary, but they may become useful later on.

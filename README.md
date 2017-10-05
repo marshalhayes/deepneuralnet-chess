@@ -23,7 +23,7 @@ If you prefer to run the tool on your own dataset, run the pgn-extract script:
 ```
 ./pgn-extract -F --fencomments ../your_dataset.pgn >> outputfile.pgn
 ```
-- "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move...
+- "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move. You can read more about the pgn-extract tool (here)[ftp://ftp.cs.kent.ac.uk/pub/djb/pgn-extract/help.html], but we will not be using it anymore in this project.
 
 On a semi-complete dataset from lichess, the manipulation took approximately an hour to complete. The resulting output file was over 50GB.
 

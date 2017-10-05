@@ -1,4 +1,4 @@
-# neuralnet-pychess
+# deepneuralnet-chess
 
 **Installation**
 According to your system, install the following packages:

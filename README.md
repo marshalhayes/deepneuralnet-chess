@@ -16,15 +16,16 @@ According to your system, install the following packages:
 **Manipulating the lichess dataset using pgn-extract**
 By using the pgn-extract package, I was able to get the FEN string for each position after every individual move. Most of the FENs are unnecessary, but they may become useful later on.
 
-Due to the large file size, the dataset is available from a Google Cloud Storage bucket here (link coming soon).
+Due to the large file size, the manipulated dataset is available from a Google Cloud Storage bucket here (link coming soon).
 
 If you prefer to run the tool on your own dataset, run the pgn-extract script:
 
 ```
 ./pgn-extract -F --fencomments ../your_dataset.pgn >> outputfile.pgn
 ```
+- "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move...
 
-  "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move...
+On a semi-complete dataset from lichess, the manipulation took approximately an hour to complete. The resulting output file was over 50GB.
 
 
 **Downloading lichess dataset**

@@ -2,8 +2,10 @@
 
 **Installation**
 According to your system, install the following packages:
-  - [tensorflow](https://www.tensorflow.org/install/)
-  
+  required:
+    - [tensorflow](https://www.tensorflow.org/install/)
+  optional:
+    - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
   
 **Steps taken to produce this model**
 1. install tensorflow

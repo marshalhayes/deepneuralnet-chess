@@ -4,7 +4,7 @@
 According to your system, install the following packages:
   - required:
     - [tensorflow](https://www.tensorflow.org/install/)
-    - [gloud sdk](https://cloud.google.com/sdk/)
+    - [gcloud sdk](https://cloud.google.com/sdk/)
   - optional:
     - wget
     - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)

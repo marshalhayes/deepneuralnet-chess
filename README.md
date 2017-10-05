@@ -18,9 +18,9 @@ Due to the large file size, the dataset is available from a Google Cloud Storage
 
 If you prefer to run the tool on your own dataset, run the pgn-extract script:
 
-'''
+```
 ./pgn-extract -F --fencomments ../your_dataset.pgn >> outputfile.pgn
-'''
+```
 
   "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move...
 

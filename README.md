@@ -15,4 +15,4 @@ If you don't want the entire dataset, remove the unwanted urls from urllist.txt 
 1. install tensorflow
 2. download lichess dataset 
 3. install pgn-extract
-  - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at each move. You can download the pgn-extract tool here [https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
+    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at each move. You can download the pgn-extract tool here [https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)

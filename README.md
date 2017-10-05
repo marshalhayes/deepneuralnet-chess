@@ -2,9 +2,9 @@
 
 **Installation**
 According to your system, install the following packages:
-  required:
+  - required:
     - [tensorflow](https://www.tensorflow.org/install/)
-  optional:
+  - optional:
     - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
   
 **Steps taken to produce this model**

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<rss version="2.0">
+
+<channel>
+  <title>Home Page for pgn-extract</title>
+  <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/</link>
+  <description>A Portable Game Notation (PGN) manipulator</description>
+
+  <item>
+    <title>Version 17-51</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.tgz</link>
+    <description>C source code for version 17-51. win32 binary available from
+    the home page.
+    Version 17-51 fixes a bug in v17-50 with --splitvariations.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-51-announce</guid>
+    <pubDate>23 July 2017 17:30:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-50</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.tgz</link>
+    <description>C source code for version 17-50. win32 binary available from
+    the home page.
+    Version 17-50 fixes some bugs, adds a PlyCount tag, adds further options to deal with games with
+    inconsistent result indications, better recognition of null moves,
+    and further support for Chess960 games, among other things, 
+    See the Change history in the help file for further details.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-50-announce</guid>
+    <pubDate>22 July 2017 18:20:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-38</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.tgz</link>
+    <description>C source code for version 17-38. win32 binary available from
+    the home page.
+    Version 17-38 adds functionality similar to pgnsplit with --splitvariants.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-38-announce</guid>
+    <pubDate>01 April 2017 09:00:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-37</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.tgz</link>
+    <description>C source code for version 17-37. win32 binary available from
+    the home page.
+    Version 17-37 fixes failure when -x and -n are used together, and lack of output
+    with -W;
+    extends --selectonly to multiple games and ranges; adds --skipmatching to suppress
+    games; corrects some missing PGN info from games.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-37-announce</guid>
+    <pubDate>21 February 2017 21:00:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-34</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.tgz</link>
+    <description>C source code for version 17-34. win32 binary available from
+    the home page.
+    Version 17-34 adds: stopping after a required number of games;
+    only outputting games with a limited number of ply;
+    filtering games with a SetUp tag;
+    outputting a FEN comment at a specific position within a game.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-34-announce</guid>
+    <pubDate>27 January 2017 16:20:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-30</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-30.tgz</link>
+    <description>C source code for version 17-30. win32 binary available from
+    the home page.
+    Version 17-30 adds recognition of Chess960 FEN encodings, substring matches on tags,
+    detection of position quiescence, correction of Result tag where it is clearly in conflict
+    with the game termination.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-30-announce</guid>
+    <pubDate>02 January 2017 19:30:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-22</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-22.tgz</link>
+    <description>C source code for version 17-22. win32 binary available from
+    the home page.
+    Version 17-22 adds warnings for games ending in checkmate or stalemate that have inconsistent
+    result tags. There are also new options to detect games with 3-fold repetition and the fifty-move rule.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-21-announce</guid>
+    <pubDate>16 October 2015 19:30:00 BST</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-21</title>
+    <link>https://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-21.tgz</link>
+    <description>C source code for version 17-21. win32 binary available from
+    the home page.
+    Version 17-21 corrects various errors; e.g. in the half-move clock on castling and pawn promotion,
+    and game counting with -#.
+    It also adds the new command-line option --nofauxep and output format -Wxlalg.</description>
+    <guid isPermaLink="false">pgn-extract-17-21-announce</guid>
+    <pubDate>08 May 2015 10:00:00 BST</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-19</title>
+    <link>http://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-19.tgz</link>
+    <description>C source code for version 17-19. win32 binary available from
+    the home page.
+    Version 17-19 corrects errors with -T and the calculation of game
+    hashcodes. It also adds new command-line options: --keepbroken, --totalplycount,
+    --addhashcode and --selectonly.</description>
+    <guid isPermaLink="false">pgn-extract-17-19-announce</guid>
+    <pubDate>29 Oct 2014 10:15:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-14 (.exe version)</title>
+    <link>http://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract.exe</link>
+    <description>Version of the 32-bit Windows executable added that
+    does not require cygwin.
+    <guid isPermaLink="false">pgn-extract-17-14-non-cygwin</guid>
+    <pubDate>29 Jun 2013 11:55:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-14</title>
+    <link>http://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-14.tgz</link>
+    <description>C source code for version 17-14.
+    Version 17-14 adds null-move (--) recognition in variations, 
+    corrects an error in the whole-move number in FEN output, and
+    corrects a minor inconsistency in variation naming in eco.pgn.</description>
+    <guid isPermaLink="false">pgn-extract-17-14-announce</guid>
+    <pubDate>19 Jun 2013 11:30:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-13</title>
+    <link>http://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-13.tgz</link>
+    <description>C source code for version 17-13.
+    Version 17-13 adds -Wuci for output in a form suitable for use as input to a UCI-compatible engine, and --fuzzydepth for ply-specific duplicates matching.</description>
+    <guid isPermaLink="false">pgn-extract-17-13-announce</guid>
+    <pubDate>19 Apr 2013 11:15:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>Version 17-12</title>
+    <link>http://www.cs.kent.ac.uk/~djb/pgn-extract/pgn-extract-17-12.tgz</link>
+    <description>C source code for version 17-12.
+    Version 17-12 is a minor bug fix for version 17-11.</description>
+    <guid isPermaLink="false">pgn-extract-17-12-announce</guid>
+    <pubDate>29 Mar 2013 15:05:00 GMT</pubDate>
+  </item>
+
+  <item>
+    <title>New in version 17-11</title>
+    <description>1) Fuzzy board matches via a regular-expression like syntax.
+    2) A test suite of the basic functionality.
+    </description>
+    <guid isPermaLink="false">pgn-extract-17-11-announce</guid>
+    <pubDate>9 Feb 2013 15:05:00 GMT</pubDate>
+  </item>
+</channel>
+
+</rss>

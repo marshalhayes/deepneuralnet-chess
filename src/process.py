@@ -14,8 +14,8 @@ filename = raw_input("Enter the filename of the dataset: ")
 
 Inside the {} is the FEN string. Seperated by one space is the final result of the game.
 '''
-f = open(filename).read()
-outfilename = filename + ".processed.txt"
+f = open(filename)
+outfilename = filename + "_processed.txt"
 outfile = open(outfilename, "w")
 
 import re, time
@@ -24,8 +24,8 @@ matches = re.finditer(regex, f, re.M|re.I)
 
 start = time.time()
 for matchNum, match in enumerate(matches):
+    print(matchNum)
     for groupNum in range(0, len(match.groups())):
-        print(match.group(1))
         outfile.write(match.group(1) + "\n")
 end = time.time()
 print("Completed in " + str(end-start) + " seconds")

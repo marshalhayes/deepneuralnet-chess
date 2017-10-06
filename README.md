@@ -13,23 +13,23 @@ According to your system, install the following packages:
 1. install tensorflow
 2. download lichess dataset 
 3. install pgn-extract
-    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at each move. You can download the pgn-extract tool [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
-4. get the last few FEN positions for each game, add them to a csv along with the result of the game
-5. use the generated csv as test_data to tensorflow
+    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at the final move of each game. You can download the pgn-extract tool [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
+3b. parse the now fen-commented dataset and extract the fen and the result, and then export that to a csv
+4. use the generated csv as training data to tensorflow
     
 **Manipulating the lichess dataset using pgn-extract**
-By using the pgn-extract package, I was able to get the FEN string for each position after every individual move. Most of the FENs are unnecessary, but they may become useful later on.
+By using the pgn-extract package, I was able to get the FEN string for the final position of each game.
 
 Due to the large file size, the manipulated dataset is available from a Google Cloud Storage bucket here (link coming soon).
 
 If you prefer to run the tool on your own dataset, run the pgn-extract script:
 
 ```
-./pgn-extract -F --fencomments ../your_dataset.pgn >> outputfile.pgn
+./pgn-extract -F ../your_dataset.pgn -o output.pgn
 ```
-- "outputfile.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on every move. You can read more about the pgn-extract tool [here](ftp://ftp.cs.kent.ac.uk/pub/djb/pgn-extract/help.html), but we will not be using it anymore in this project.
+- "output.pgn" consists of the entire values of "your_dataset.pgn" with the FEN position commented on the final position. You can read more about the pgn-extract tool [here](ftp://ftp.cs.kent.ac.uk/pub/djb/pgn-extract/help.html), but we will not be using it anymore in this project.
 
-On a semi-complete dataset from lichess, the manipulation took approximately an hour to complete. The resulting output file was over 50GB.
+On a semi-complete dataset from lichess, the manipulation took approximately an hour to complete on a Google Compute Engine VM. The resulting output file was over 50GB.
 
 
 **Downloading lichess dataset**

@@ -14,7 +14,7 @@ filename = raw_input("Enter the filename of the dataset: ")
 
 Inside the {} is the FEN string. Seperated by one space is the final result of the game.
 '''
-f = open(filename)
+f = open(filename).read()
 outfilename = filename + "_processed.txt"
 outfile = open(outfilename, "w")
 

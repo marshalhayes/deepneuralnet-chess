@@ -15,17 +15,17 @@ filename = raw_input("Enter the filename of the dataset: ")
 Inside the {} is the FEN string. Seperated by one space is the final result of the game.
 '''
 f = open(filename).read()
-outfilename = filename + "_processed.txt"
-outfile = open(outfilename, "w")
 
-import re, time
+import re
 regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
 matches = re.finditer(regex, f, re.M|re.I)
 
-start = time.time()
+import csv
+outfilename = "processed-output.csv"
+outfile = open(outfilename, "wb")
+
 for matchNum, match in enumerate(matches):
-    print(matchNum)
     for groupNum in range(0, len(match.groups())):
-        outfile.write(match.group(1) + "\n")
-end = time.time()
-print("Completed in " + str(end-start) + " seconds")
+        # delete the {\s from the matched string, then split on {
+        fen, result = (match.group(1))[2:].split('}')
+        outfile.write(fen + "," + result)

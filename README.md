@@ -1,14 +1,17 @@
 # deepneuralnet-chess
 
+# Getting Started 
 **Installation**
 According to your system, install the following packages:
   - required:
     - [tensorflow](https://www.tensorflow.org/install/)
     - [gcloud sdk](https://cloud.google.com/sdk/)
+    - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
   - optional:
     - wget
-    - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
-  
+       - wget comes prepackaged with many linux distributions. If you plan to download the lichess dataset yourself, you will need wget. Otherwise, you do not need it.
+
+# Data Manipulation
 **Steps taken to produce this model**
 1. install tensorflow
 2. download lichess dataset 

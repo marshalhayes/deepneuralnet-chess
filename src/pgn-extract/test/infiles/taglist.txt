@@ -1,3 +1,0 @@
-White "Fischer"
-Black "Petrosian"
-Date "1970"

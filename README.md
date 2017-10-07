@@ -1,4 +1,4 @@
-# deepneuralnet-chess
+# DEEPNEURALNET-CHESS
 
 # Getting Started 
 **Installation**

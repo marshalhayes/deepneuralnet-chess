@@ -5,7 +5,6 @@
 According to your system, install the following packages:
   - required:
     - [tensorflow](https://www.tensorflow.org/install/)
-    - [gcloud sdk](https://cloud.google.com/sdk/)
     - [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
   - optional:
     - wget
@@ -41,3 +40,6 @@ Due to the massive dataset of 200,000,000+ Chess games, I have created a script 
 *In order to run the import script, you will need to download wget for your system.*
 
 If you don't want the entire dataset, remove the unwanted urls from urllist.txt located in data/. You can also download specific datasets by simply visiting [database.lichess.org](https://database.lichess.org/) directly.
+
+# References
+None

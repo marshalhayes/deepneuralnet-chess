@@ -3,7 +3,7 @@ process.py collects all FEN strings iff a valid game result is next to it (i.e. 
 In other words, only one FEN string is collected for each game (that is the FEN
 which corresponds to the final position)
 
-The output of process.py is a CSV file containing the matches from the regular expression. 
+The output of process.py is a CSV file containing the matches from the regular expression.
 '''
 
 filename = raw_input("Enter the filename of the dataset: ")

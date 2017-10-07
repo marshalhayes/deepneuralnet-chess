@@ -1,9 +1,9 @@
 '''
-process.py collects all FEN strings iff the game result is next to it
+process.py collects all FEN strings iff a valid game result is next to it (i.e. 1-0 or 0-1 or 1/2-1/2)
 In other words, only one FEN string is collected for each game (that is the FEN
 which corresponds to the final position)
 
-The output of process.py is a text file containing the matches from the regular expression.
+The output of process.py is a CSV file containing the matches from the regular expression. 
 '''
 
 filename = raw_input("Enter the filename of the dataset: ")
@@ -11,9 +11,9 @@ filename = raw_input("Enter the filename of the dataset: ")
 # file format of f before manipulation should be :
 '''
 { rnbqkbnr/pppppppp/8/8/1P6/8/P1PPPPPP/RNBQKBNR b KQkq b3 0 1 } *
-
 Inside the {} is the FEN string. Seperated by one space is the final result of the game.
 '''
+
 f = open(filename).read()
 
 import re

@@ -29,3 +29,4 @@ for matchNum, match in enumerate(matches):
         # delete the {\s from the matched string, then split on {
         fen, result = (match.group(1))[2:].split('}')[:2]
         outfile.write(fen.replace('"', '') + "," + result + "\r\n")
+        print(fen.replace('"', '') + "," + result + "\r\n")

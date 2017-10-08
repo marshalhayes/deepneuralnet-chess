@@ -27,23 +27,33 @@ from tensorflow.python.ops import string_ops
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/layers/python/layers/feature_column.py
 
 # csv columns in the input file
-CSV_COLUMNS = ['position', 'result']
+CSV_COLUMNS = ('age', 'workclass', 'fnlwgt', 'education', 'education_num',
+               'marital_status', 'occupation', 'relationship', 'race',
+               'gender', 'capital_gain', 'capital_loss', 'hours_per_week',
+               'native_country', 'income_bracket')
 
-CSV_COLUMN_DEFAULTS = [[''], ['']]
+CSV_COLUMN_DEFAULTS = [[0], [''], [0], [''], [0], [''], [''], [''], [''],
+                       [''], [0], [0], [0], [''], ['']]
 
-# CATEGORICAL_COLS = (('result', 3)) --> "too many values to unpack"
-# CATEGORICAL_COLS = [('result', 3)] --> key error: result
-CATEGORICAL_COLS = []
-CONTINUOUS_COLS = ['position']
+# Categorical columns with vocab size
+CATEGORICAL_COLS = (('education', 16), ('marital_status', 7),
+                    ('relationship', 6), ('workclass', 9), ('occupation', 15),
+                    ('native_country', 42), ('gender', [' Male', ' Female']),
+                    ('race', 5))
 
-LABELS = ['1-0', '0-1', '1/2-1/2']
-LABEL_COLUMN = 'result'
+CONTINUOUS_COLS = ('age', 'education_num', 'capital_gain', 'capital_loss',
+                   'hours_per_week')
 
-UNUSED_COLUMNS = []
+LABELS = [' <=50K', ' >50K']
+LABEL_COLUMN = 'income_bracket'
+
+UNUSED_COLUMNS = set(CSV_COLUMNS) - set(
+    zip(*CATEGORICAL_COLS)[0] + CONTINUOUS_COLS + (LABEL_COLUMN,))
 
 TRAIN, EVAL, PREDICT = 'TRAIN', 'EVAL', 'PREDICT'
 CSV, EXAMPLE, JSON = 'CSV', 'EXAMPLE', 'JSON'
 PREDICTION_MODES = [CSV, EXAMPLE, JSON]
+
 
 def model_fn(mode,
              features,
@@ -52,14 +62,12 @@ def model_fn(mode,
              hidden_units=[100, 70, 50, 20],
              learning_rate=0.1):
   """Create a Feed forward network classification network
-
   Args:
     mode (string): Mode running training, evaluation or prediction
     features (dict): Dictionary of input feature Tensors
     labels (Tensor): Class label Tensor
     hidden_units (list): Hidden units
     learning_rate (float): Learning rate for the SGD
-
   Returns:
     Depending on the mode returns Tuple or Dict
   """
@@ -90,8 +98,7 @@ def model_fn(mode,
   for col in CONTINUOUS_COLS:
     # Give continuous columns an extra trivial dimension
     # So they can be concatenated with embedding tensors
-    # features[col] = tf.expand_dims(tf.to_float(features[col]), -1) -----> cannot cast string to float, need hash??
-    features[col] = features[col]
+    features[col] = tf.expand_dims(tf.to_float(features[col]), -1)
 
   # Concatenate the (now all dense) features.
   # We need to sort the tensors so that they end up in the same order for
@@ -179,7 +186,6 @@ def model_fn(mode,
 
 def csv_serving_input_fn(default_batch_size=None):
   """Build the serving inputs.
-
   Args:
     default_batch_size (int): Batch size for the tf.placeholder shape
   """
@@ -187,7 +193,6 @@ def csv_serving_input_fn(default_batch_size=None):
       shape=[default_batch_size],
       dtype=tf.string
   )
-
   features = parse_csv(csv_row)
   features.pop(LABEL_COLUMN)
   return features, {'csv_row': csv_row}
@@ -195,13 +200,12 @@ def csv_serving_input_fn(default_batch_size=None):
 
 def example_serving_input_fn(default_batch_size=None):
   """Build the serving inputs.
-
   Args:
     default_batch_size (int): Batch size for the tf.placeholder shape
   """
   feature_spec = {}
   for feat in CONTINUOUS_COLS:
-    feature_spec[feat] = tf.FixedLenFeature(shape=[], dtype=tf.string)
+    feature_spec[feat] = tf.FixedLenFeature(shape=[], dtype=tf.int64)
 
   for feat, _ in CATEGORICAL_COLS:
     feature_spec[feat] = tf.FixedLenFeature(shape=[], dtype=tf.string)
@@ -216,7 +220,6 @@ def example_serving_input_fn(default_batch_size=None):
 
 def json_serving_input_fn(default_batch_size=None):
   """Build the serving inputs.
-
   Args:
     default_batch_size (int): Batch size for the tf.placeholder shape
   """
@@ -236,6 +239,7 @@ SERVING_INPUT_FUNCTIONS = {
     CSV: csv_serving_input_fn,
     EXAMPLE: example_serving_input_fn
 }
+
 
 def parse_csv(rows_string_tensor):
   """Takes the string input tensor and returns a dict of rank-2 tensors."""
@@ -262,7 +266,6 @@ def input_fn(filenames,
   """Generates an input function for training or evaluation.
   This uses the input pipeline based approach using file name queue
   to read data so that entire data is not loaded in memory.
-
   Args:
       filenames: [str] list of CSV files to read data from.
       num_epochs: int how many times through to read the data.

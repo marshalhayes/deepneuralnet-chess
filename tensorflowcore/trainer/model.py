@@ -27,14 +27,11 @@ from tensorflow.python.ops import string_ops
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/layers/python/layers/feature_column.py
 
 # csv columns in the input file
-CSV_COLUMNS = ('age', 'workclass', 'fnlwgt', 'education', 'education_num',
-               'marital_status', 'occupation', 'relationship', 'race',
-               'gender', 'capital_gain', 'capital_loss', 'hours_per_week',
-               'native_country', 'income_bracket')
+CSV_COLUMNS = ('position', 'result')
 
-CSV_COLUMN_DEFAULTS = [[0], [''], [0], [''], [0], [''], [''], [''], [''],
-                       [''], [0], [0], [0], [''], ['']]
+CSV_COLUMN_DEFAULTS = [[''], ['']]
 
+'''
 # Categorical columns with vocab size
 CATEGORICAL_COLS = (('education', 16), ('marital_status', 7),
                     ('relationship', 6), ('workclass', 9), ('occupation', 15),
@@ -43,12 +40,16 @@ CATEGORICAL_COLS = (('education', 16), ('marital_status', 7),
 
 CONTINUOUS_COLS = ('age', 'education_num', 'capital_gain', 'capital_loss',
                    'hours_per_week')
+'''
 
-LABELS = [' <=50K', ' >50K']
-LABEL_COLUMN = 'income_bracket'
+CATEGORICAL_COLS = (('result', 2))
 
-UNUSED_COLUMNS = set(CSV_COLUMNS) - set(
-    zip(*CATEGORICAL_COLS)[0] + CONTINUOUS_COLS + (LABEL_COLUMN,))
+LABELS = ['1-0', '0-1', '1/2-1/2']
+LABEL_COLUMN = 'result'
+
+UNUSED_COLUMNS = []
+CATEGORICAL_COLS = []
+CONTINUOUS_COLS = []
 
 TRAIN, EVAL, PREDICT = 'TRAIN', 'EVAL', 'PREDICT'
 CSV, EXAMPLE, JSON = 'CSV', 'EXAMPLE', 'JSON'
@@ -196,6 +197,7 @@ def csv_serving_input_fn(default_batch_size=None):
       shape=[default_batch_size],
       dtype=tf.string
   )
+
   features = parse_csv(csv_row)
   features.pop(LABEL_COLUMN)
   return features, {'csv_row': csv_row}
@@ -241,10 +243,9 @@ def json_serving_input_fn(default_batch_size=None):
 
 SERVING_INPUT_FUNCTIONS = {
     JSON: json_serving_input_fn,
-    CSV: csv_serving_input_fn,
+    CSV: csv_serving_input_fn(0),
     EXAMPLE: example_serving_input_fn
 }
-
 
 def parse_csv(rows_string_tensor):
   """Takes the string input tensor and returns a dict of rank-2 tensors."""

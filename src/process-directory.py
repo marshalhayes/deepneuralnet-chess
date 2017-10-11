@@ -19,5 +19,5 @@ for filename in glob.glob('*.txt'):
                 matchcount += 1
                 fen, result = match.group(0)[2:].split('}')[:2]
                 position, whosmove = fen.split(' ')[:2].replace('"','')
-                outputfile.write(position.replace('"', '') + "," + whosmove + "," + result.strip() + "\r\n")
-                print(str(matchcount) + ' matches found')
+                outputfile.write(position[1:] + "," + whosmove + "," + result.strip() + "\r\n")
+                print(position[1:] + "," + whosmove + "," + result + "\r\n")

@@ -4,6 +4,7 @@ import glob
 
 regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
 outputfile = open('processed-output-fen_and_result.csv','wb')
+outputfile.write("position, color_to_move, result")
 
 matchcount = 0
 for filename in glob.glob('*.txt'):
@@ -17,5 +18,7 @@ for filename in glob.glob('*.txt'):
             if match is not None:
                 matchcount += 1
                 fen, result = match.group(0)[2:].split('}')[:2]
-                outputfile.write(fen.replace('}', "''").replace('"', '').strip() + "," + result.strip() + "\r\n")
+                position = fen.split('\s')[:1]
+                print(position)
+                # outputfile.write(fen.replace('}', "''").replace('"', '').strip() + "," + result.strip() + "\r\n")
                 print('Match ' + str(matchcount) + ' found')

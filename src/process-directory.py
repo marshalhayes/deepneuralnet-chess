@@ -33,5 +33,6 @@ for filename in glob.glob('*.txt'):
                 position, whosmove = fen.split(' ')[:2]
                 # outputfile.write(position[1:].replace('"', '') + "," + whosmove + "," + result.strip() + "\r\n")
                 # print(position[1:].replace('"','') + "," + whosmove + "," + result.strip() + "\r\n")
-                outputfile.write(",".join(vectorize_stripped_fen(position[1:].replace('"',''))) + "," + whosmove + "," + "\r\n")
+                position = position[1:].replace('"', '')
+                outputfile.write(str(",".join(vectorize_stripped_fen(position))) + "," + whosmove + "," + "\r\n")
                 print(str(match) + " matches found");

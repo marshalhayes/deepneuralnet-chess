@@ -18,7 +18,7 @@ for filename in glob.glob('*.txt'):
             if match is not None:
                 matchcount += 1
                 fen, result = match.group(0)[2:].split('}')[:2]
-                position = fen.split('\s')[:1]
-                print(position)
+                position, whosmove = fen.split('\s')[2:]
+                print(position, whosmove)
                 # outputfile.write(fen.replace('}', "''").replace('"', '').strip() + "," + result.strip() + "\r\n")
                 print('Match ' + str(matchcount) + ' found')

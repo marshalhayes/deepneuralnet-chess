@@ -7,7 +7,7 @@ def vectorize_stripped_fen(fen_row_string):
     row_elements = list(fen_row_string)
     for elem in row_elements:
         if elem.isdigit():
-            for num in range(elem):
+            for num in range(int(elem)):
                 row_vector.append(0) # if the elem is a number, set that number of preceeding elements to empty squares (0)
         else:
             row_vector.append(elem) # if the elem is a piece (letter)

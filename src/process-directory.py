@@ -18,6 +18,6 @@ for filename in glob.glob('*.txt'):
             if match is not None:
                 matchcount += 1
                 fen, result = match.group(0)[2:].split('}')[:2]
-                position, whosmove = fen.split(' ')[:2].replace('"','')
-                outputfile.write(position[1:] + "," + whosmove + "," + result.strip() + "\r\n")
+                position, whosmove = fen.split(' ')[:2]
+                outputfile.write(position.replace[1:] + "," + whosmove + "," + result.strip() + "\r\n")
                 print(position[1:] + "," + whosmove + "," + result + "\r\n")

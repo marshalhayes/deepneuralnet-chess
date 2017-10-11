@@ -20,4 +20,4 @@ for filename in glob.glob('*.txt'):
                 fen, result = match.group(0)[2:].split('}')[:2]
                 position, whosmove = fen.split(' ')[:2]
                 outputfile.write(position[1:].replace('"', '') + "," + whosmove + "," + result.strip() + "\r\n")
-                print(position[1:].replace('"','') + "," + whosmove + "," + result + "\r\n")
+                print(position[1:].replace('"','') + "," + whosmove + "," + result.strip() + "\r\n")

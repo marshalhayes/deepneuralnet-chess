@@ -20,7 +20,7 @@ outputfile = open('processed-output-fen_and_result.csv','wb')
 outputfile.write(COLS_HEADERS + "\r\n")
 
 matchcount = 0
-for filename in glob.glob('*.txt'):
+for filename in glob.glob('*.pgn'):
     print("Reading " + filename + " ... ")
     with open(filename) as f:
         for line in f:

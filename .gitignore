@@ -2,3 +2,4 @@
 *.gz
 *.bz2
 *.csv
+.DS_Store

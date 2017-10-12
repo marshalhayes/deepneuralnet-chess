@@ -40,5 +40,5 @@ for filename in glob.glob('*.txt'):
 
                 position_vector = row_vectors
 
-                outputfile.write(",".join(str(x) for x in position_vector + "," + whosmove + "," + result + "\r\n")
+                outputfile.write(",".join(str(x) for x in position_vector + "," + whosmove + "," + result + "\r\n"))
                 print(str(matchcount) + " matches found");

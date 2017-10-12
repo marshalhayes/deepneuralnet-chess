@@ -1,32 +1,44 @@
-'''
-process.py collects all FEN strings iff a valid game result is next to it (i.e. 1-0 or 0-1 or 1/2-1/2)
-In other words, only one FEN string is collected for each game (that is the FEN
-which corresponds to the final position)
-
-The output of process.py is a CSV file containing the matches from the regular expression.
-'''
-
-filename = raw_input("Enter the filename of the dataset: ")
-
-# file format of f before manipulation should be :
-'''
-{ rnbqkbnr/pppppppp/8/8/1P6/8/P1PPPPPP/RNBQKBNR b KQkq b3 0 1 } *
-Inside the {} is the FEN string. Seperated by one space is the final result of the game.
-'''
-
-f = open(filename).read()
-
 import re
+import glob
+
+COLS_HEADERS = "a8,b8,c8,d8,e8,f8,g8,h8,a7,b7,c7,d7,e7,f7,g7,h7,a6,b6,c6,d6,e6,f6,g6,h6,a5,b5,c5,d5,e5,f5,g5,h5,a4,b4,c4,d4,e4,f4,g4,h4,a3,b3,c3,d3,e3,f3,g3,h3,a2,b2,c2,d2,e2,f2,g2,h2,a1,b1,c1,d1,e1,f1,g1,h1,whos_move,result"
+# returns row vector corresponding to row fen string
+def vectorize_stripped_fen(fen_row_string):
+    row_vector = []
+    row_elements = list(fen_row_string)
+    for elem in row_elements:
+        if elem.isdigit():
+            for num in range(int(elem)):
+                row_vector.append(0) # if the elem is a number, set that number of preceeding elements to empty squares (0)
+        else:
+            row_vector.append(elem) # if the elem is a piece (letter)
+
+    return row_vector
+
 regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
-matches = re.finditer(regex, f, re.M|re.I)
+outputfile = open('processed-output-fen_and_result.csv','wb')
+outputfile.write(COLS_HEADERS + "\r\n")
 
-import csv
-outfilename = "processed-output.csv"
-outfile = open(outfilename, "wb")
+matchcount = 0
+for filename in glob.glob('*.txt'):
+    print("Reading " + filename + " ... ")
+    with open(filename) as f:
+        for line in f:
+            match = re.search(regex, line)
+            if match is not None:
+                matchcount += 1
+                fen, result = match.group(0)[2:].split('}')[:2]
+                position, whosmove = fen.split(' ')[:2]
 
-for matchNum, match in enumerate(matches):
-    for groupNum in range(0, len(match.groups())):
-        # delete the {\s from the matched string, then split on {
-        fen, result = (match.group(1))[2:].split('}')[:2]
-        outfile.write(fen.replace('"', '').strip() + "," + result.strip() + "\r\n")
-        print(fen.replace('"', '').strip() + "," + result.strip() + "\r\n")
+                position = position[1:].replace('"', '')
+                rows = position.split('/')
+
+                row_vectors = []
+                position_vector = []
+                for row in rows:
+                    row_vectors = vectorize_stripped_fen(row) + row_vectors
+
+                position_vector = row_vectors
+
+                outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + result + "\r\n")
+                print(str(matchcount) + " matches found");

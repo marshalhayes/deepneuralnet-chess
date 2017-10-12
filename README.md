@@ -15,9 +15,13 @@ According to your system, install the following packages:
 1. install tensorflow
 2. download lichess dataset 
 3. install pgn-extract
-    - pgn-extract is a terminal tool that can do a multitude of valuable things. I used it to get the FEN string value at the final move of each game. You can download the pgn-extract tool [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/)
-4. run [src/process.py](https://github.com/marshalhayes/deepneuralnet-chess/blob/master/src/process.py) on the now fen-commented dataset and extract the fens and the results, and then export that to a csv
-5. use the generated csv as training data to tensorflow
+4. run pgn-extract on the dataset to 'extract' the FEN position
+    ```
+    pgn-extract --nocomments --notags --novars --nomovenumbers -F -#100000,100 ../orig/lichess_db_standard_rated_2015-01.pgn
+    ```
+    The above command removes the headers, comments, evaluations, and move numbers. Then it finds the FEN position for the final move of the game. It then writes 100,000 games per file...starting with the file name 1.pgn and goes in order (2.pgn, 3.pgn, ...). You can read more about pgn-extract [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/).
+5. run [src/process.py](https://github.com/marshalhayes/deepneuralnet-chess/blob/master/src/process.py) on the new fen-commented dataset, extract the fen & result and vectorize each row for each game
+6. use the generated csv as training data to tensorflow
 
 **Downloading lichess dataset**
 Due to the massive dataset of 200,000,000+ Chess games available from lichess, I have created a script that can auto-download the entire ~40GB (compressed) dataset...To download the dataset, run import.sh from data/

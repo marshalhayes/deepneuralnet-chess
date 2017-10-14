@@ -1,3 +1,1 @@
-mkdir lichess 
-
-while read line; do wget -E -H --directory-prefix=lichess -k -p $line; done < urllist.txt
+while read line; do wget $line -P "/home/marshal/dnn-chess-bucket/lichess-datasets"; done < urllist.txt

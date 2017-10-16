@@ -40,5 +40,5 @@ for filename in glob.glob('*.pgn'):
 
                 position_vector = row_vectors
 
-                outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + fen + "," + result.strip() + "\r\n")
+                outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + fen.replace('"', '') + "," + result.strip() + "\r\n")
                 print(str(matchcount) + " matches found");

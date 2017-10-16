@@ -434,10 +434,10 @@ def input_fn(data_file, num_epochs, shuffle):
 # set num_epochs to None to get infinite stream of data.
 m.train(
     input_fn=input_fn("processed-output-2015-train.csv", num_epochs=None, shuffle=True),
-    steps=13)
+    steps=100)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("processed-output-2015-test.csv", num_epochs=100, shuffle=False),
+    input_fn=input_fn("processed-output-2015-test.csv", num_epochs=500, shuffle=True),
     steps=None)
 print("model directory = %s" % model_dir)
 for key in sorted(results):

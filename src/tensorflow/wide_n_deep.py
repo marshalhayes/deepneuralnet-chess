@@ -10,8 +10,8 @@ result = tf.feature_column.categorical_column_with_vocabulary_list(
     "result", ["1-0", "0-1", "1/2-1/2"])
 
 # Continuous Columns
-fen = tf.feature_column.categorical_column_with_hash_bucket(
-    "fen", hash_bucket_size=1000)
+# fen = tf.feature_column.categorical_column_with_hash_bucket(
+#     "fen", hash_bucket_size=1000)
 
 a1 = tf.feature_column.categorical_column_with_hash_bucket(
     "a1", hash_bucket_size=13)
@@ -371,46 +371,13 @@ deep_columns = [
     tf.feature_column.indicator_column(h5),
     tf.feature_column.indicator_column(h6),
     tf.feature_column.indicator_column(h7),
-    tf.feature_column.indicator_column(h8)
+    tf.feature_column.indicator_column(h8),
+    tf.feature_column.indicator_column(whos_move)
 ]
-
-# Combine the wide and deep models into one
-model_dir = tempfile.mkdtemp()
-m = tf.estimator.DNNLinearCombinedClassifier(
-    model_dir=model_dir,
-    linear_feature_columns=crossed_columns,
-    dnn_feature_columns=deep_columns,
-    dnn_hidden_units=[100,50])
 
 CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2','f2','g2','h2','a3','b3','c3','d3','e3','f3','g3','h3'
 ,'a4','b4','c4','d4','e4','f4','g4','h4','a5','b5','c5','d5','e5','f5','g5','h5','a6','b6','c6','d6','e6','f6','g6','h6','a7',
 'b7','c7','d7','e7','f7','g7','h7','a8','b8','c8','d8','e8','f8','g8','h8','whos_move','fen','result']
-
-def maybe_download(train_data, test_data):
-  """Maybe downloads training data and returns train and test file names."""
-  if train_data:
-    train_file_name = train_data
-  else:
-    train_file = tempfile.NamedTemporaryFile(delete=False)
-    urllib.request.urlretrieve(
-        "https://storage.googleapis.com/dnn-chess/lichess-datasets/2015/extracted/processed-output-2015-train.csv",
-        train_file.name)  # pylint: disable=line-too-long
-    train_file_name = train_file.name
-    train_file.close()
-    print("Training data is downloaded to %s" % train_file_name)
-
-  if test_data:
-    test_file_name = test_data
-  else:
-    test_file = tempfile.NamedTemporaryFile(delete=False)
-    urllib.request.urlretrieve(
-        "https://storage.googleapis.com/dnn-chess/lichess-datasets/2015/extracted/processed-output-2015-test.csv",
-        test_file.name)  # pylint: disable=line-too-long
-    test_file_name = test_file.name
-    test_file.close()
-    print("Test data is downloaded to %s"% test_file_name)
-
-  return train_file_name, test_file_name
 
 def input_fn(data_file, num_epochs, shuffle):
   """Input builder function."""
@@ -431,13 +398,21 @@ def input_fn(data_file, num_epochs, shuffle):
       shuffle=shuffle,
       num_threads=5)
 
+# Combine the wide and deep models into one
+model_dir = tempfile.mkdtemp()
+m = tf.estimator.DNNLinearCombinedClassifier(
+    model_dir=model_dir,
+    linear_feature_columns=crossed_columns,
+    dnn_feature_columns=deep_columns,
+    dnn_hidden_units=[100,50])
+
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("processed-output-2015-train.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn("train-data.csv", num_epochs=None, shuffle=True),
     steps=100)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("processed-output-2015-test.csv", num_epochs=500, shuffle=True),
+    input_fn=input_fn("test-data.csv", num_epochs=500, shuffle=True),
     steps=None)
 print("model directory = %s" % model_dir)
 for key in sorted(results):

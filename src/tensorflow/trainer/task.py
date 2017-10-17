@@ -1,7 +1,6 @@
 import tensorflow as tf
 import tempfile
 import pandas as pd
-import urllib
 
 # Categorical Columns
 whos_move = tf.feature_column.categorical_column_with_vocabulary_list(
@@ -10,8 +9,8 @@ result = tf.feature_column.categorical_column_with_vocabulary_list(
     "result", ["1-0", "0-1", "1/2-1/2"])
 
 # Continuous Columns
-# fen = tf.feature_column.categorical_column_with_hash_bucket(
-#     "fen", hash_bucket_size=1000)
+fen = tf.feature_column.categorical_column_with_hash_bucket(
+    "fen", hash_bucket_size=1000)
 
 a1 = tf.feature_column.categorical_column_with_hash_bucket(
     "a1", hash_bucket_size=13)
@@ -149,143 +148,6 @@ h7 = tf.feature_column.categorical_column_with_hash_bucket(
 h8 = tf.feature_column.categorical_column_with_hash_bucket(
     "h8", hash_bucket_size=13)
 
-# # Remaining Columns - A
-# a1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# a8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "a8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - B
-# b1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# b8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "b8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - C
-# c1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# c8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "c8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - D
-# d1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# d8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "d8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - E
-# e1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# e8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "e8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - F
-# f1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# f8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "f8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - G
-# g1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# g8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "g8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# # Remaining Columns - H
-# h1 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h1", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h2 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h2", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h3 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h3", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h4 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h4", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h5 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h5", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h6 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h6", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h7 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h7", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-# h8 = tf.feature_column.categorical_column_with_vocabulary_list(
-#     "h8", [0,"r","R","n","N","b","B","q","Q","k","K","p","P"])
-
 # Linear Model (Wide)
 base_columns = [
     a1,a2,a3,a4,a5,a6,a7,a8,
@@ -381,9 +243,11 @@ CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2',
 
 def input_fn(data_file, num_epochs, shuffle):
   """Input builder function."""
+  print("Reading input...")
   df_data = pd.read_csv(
       tf.gfile.Open(data_file),
       names=CSV_COLUMNS,
+      verbose=True,
       skipinitialspace=True,
       engine="python",
       skiprows=1)
@@ -408,12 +272,12 @@ m = tf.estimator.DNNLinearCombinedClassifier(
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("train-data.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn("xaa.train.csv", num_epochs=None, shuffle=True),
     steps=100)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("test-data.csv", num_epochs=500, shuffle=True),
-    steps=None)
+    input_fn=input_fn("xai.test.csv", num_epochs=1, shuffle=False),
+    steps=10)
 print("model directory = %s" % model_dir)
 for key in sorted(results):
   print("%s: %s" % (key, results[key]))

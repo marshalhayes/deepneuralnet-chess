@@ -272,12 +272,12 @@ m = tf.estimator.DNNLinearCombinedClassifier(
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("xaa.train.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn("small-train-data.csv", num_epochs=None, shuffle=True),
     steps=100)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("xai.test.csv", num_epochs=1, shuffle=False),
-    steps=10)
+    input_fn=input_fn("small-test-data.csv", num_epochs=1, shuffle=False),
+    steps=None)
 print("model directory = %s" % model_dir)
 for key in sorted(results):
   print("%s: %s" % (key, results[key]))

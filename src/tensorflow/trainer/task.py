@@ -160,7 +160,7 @@ base_columns = [
     h1,h2,h3,h4,h5,h6,h7,h8,
     whos_move
 ]
-crossed_columns = []
+crossed_columns = [whos_move,a1,a2 ]
 
 # Neural Network (Deep)
 deep_columns = [
@@ -268,16 +268,16 @@ m = tf.estimator.DNNLinearCombinedClassifier(
     model_dir=model_dir,
     linear_feature_columns=crossed_columns,
     dnn_feature_columns=deep_columns,
-    dnn_hidden_units=[100,50])
+    dnn_hidden_units=[1000,600])
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("small-train-data.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn("train-data-5000.csv", num_epochs=None, shuffle=True),
     steps=100)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("small-test-data.csv", num_epochs=1, shuffle=False),
+    input_fn=input_fn("test-data-5000.csv", num_epochs=1, shuffle=False),
     steps=None)
 print("model directory = %s" % model_dir)
 for key in sorted(results):
-  print("%s: %s" % (key, results[key]))
+    print("%s: %s" % (key, results[key]))

@@ -3,3 +3,5 @@
 *.bz2
 *.csv
 .DS_Store
+*.ipynb
+.ipynb*

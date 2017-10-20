@@ -253,7 +253,7 @@ def input_fn(data_file, num_epochs, shuffle):
       skiprows=1)
   # remove NaN elements
   df_data = df_data.dropna(how="any", axis=0)
-  labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
+  labels = df_data["result"].apply(lambda x: "0-1" in x).astype(int)
   return tf.estimator.inputs.pandas_input_fn(
       x=df_data,
       y=labels,
@@ -273,7 +273,7 @@ m = tf.estimator.DNNLinearCombinedClassifier(
 # set num_epochs to None to get infinite stream of data.
 m.train(
     input_fn=input_fn("train-data-5000.csv", num_epochs=None, shuffle=True),
-    steps=100)
+    steps=500)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
     input_fn=input_fn("test-data-5000.csv", num_epochs=1, shuffle=False),

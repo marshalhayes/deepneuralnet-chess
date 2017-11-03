@@ -1,5 +1,4 @@
 import tensorflow as tf
-import tempfile
 import pandas as pd
 
 # Categorical Columns
@@ -253,7 +252,7 @@ def input_fn(data_file, num_epochs, shuffle):
       skiprows=1)
   # remove NaN elements
   df_data = df_data.dropna(how="any", axis=0)
-  labels = df_data["result"].apply(lambda x: "0-1" in x).astype(int)
+  labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
   return tf.estimator.inputs.pandas_input_fn(
       x=df_data,
       y=labels,
@@ -262,22 +261,67 @@ def input_fn(data_file, num_epochs, shuffle):
       shuffle=shuffle,
       num_threads=5)
 
+# def input_fn():
+#     filename_queue = tf.train.string_input_producer(["train-data-10000.csv"], ["test-data-10000.csv"])
+#     reader = tf.TextLineReader()
+#     key, value = reader.read(filename_queue)
+#
+#     # Set default values
+#     record_defaults = [ ["0"] for i in range(64) ]
+#
+#     col1, col2, col3, col4, col5, col6, col7,
+#         col8, col9, col10, col11, col12, col13,
+#         col14, col15, col16, col17, col18, col19,
+#         col20, col21, col22, col23, col24, col25,
+#         col26, col27, col28, col29, col30, col31,
+#         col32, col32, col33, col34, col35, col36,
+#         col37, col38, col39, col40, col41, col42,
+#         col43, col44, col45, col46, col47, col48,
+#         col49, col50, col51, col52, col53, col54,
+#         col55, col56, col57, col58, col59, col60,
+#         col61, col62, col63, col64, whos_move, result = tf.decode_csv(value, record_defaults=record_defaults)
+#
+#     features = tf.stack([col1, col2, col3, col4, col5, col6, col7,
+#         col8, col9, col10, col11, col12, col13,
+#         col14, col15, col16, col17, col18, col19,
+#         col20, col21, col22, col23, col24, col25,
+#         col26, col27, col28, col29, col30, col31,
+#         col32, col32, col33, col34, col35, col36,
+#         col37, col38, col39, col40, col41, col42,
+#         col43, col44, col45, col46, col47, col48,
+#         col49, col50, col51, col52, col53, col54,
+#         col55, col56, col57, col58, col59, col60,
+#         col61, col62, col63, col64, whos_move, result])
+#
+#     with tf.Session() as sess:
+#       # Start populating the filename queue.
+#       coord = tf.train.Coordinator()
+#       threads = tf.train.start_queue_runners(coord=coord)
+#
+#       for i in range(1200):
+#         # Retrieve a single instance:
+#         example, label = sess.run([features, result])
+#
+#       coord.request_stop()
+#       coord.join(threads)
+
 # Combine the wide and deep models into one
-model_dir = tempfile.mkdtemp()
+model_dir = "output"
 m = tf.estimator.DNNLinearCombinedClassifier(
     model_dir=model_dir,
     linear_feature_columns=crossed_columns,
     dnn_feature_columns=deep_columns,
-    dnn_hidden_units=[1000,600])
+    dnn_hidden_units=[10,6])
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("train-data-5000.csv", num_epochs=None, shuffle=True),
-    steps=500)
+    input_fn=input_fn("data/train-data-5000.csv", num_epochs=None, shuffle=True),
+    steps=1000)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("test-data-5000.csv", num_epochs=1, shuffle=False),
+    input_fn=input_fn("data/test-data-5000.csv", num_epochs=4, shuffle=False),
     steps=None)
 print("model directory = %s" % model_dir)
+
 for key in sorted(results):
     print("%s: %s" % (key, results[key]))

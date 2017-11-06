@@ -159,7 +159,8 @@ base_columns = [
     h1,h2,h3,h4,h5,h6,h7,h8,
     whos_move
 ]
-crossed_columns = [whos_move,a1,a2 ]
+
+crossed_columns = []
 
 # Neural Network (Deep)
 deep_columns = [

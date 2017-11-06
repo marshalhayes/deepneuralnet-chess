@@ -3,6 +3,7 @@
 **Graph**
 ![Image of Graph](https://github.com/marshalhayes/deepneuralnet-chess/blob/master/src/tensorflow/charts/graph.png)
 
+**Projector**
 ![Image of Projector](https://raw.githubusercontent.com/marshalhayes/deepneuralnet-chess/master/src/tensorflow/charts/projector.png)
 
 **Activation**

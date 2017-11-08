@@ -1,6 +1,9 @@
-# from tqdm import tqdm
 import tensorflow as tf
+# print("tensorflow", tf.__version__)
 import pandas as pd
+# print("pandas", pd.__version__)
+import logging as log
+# print(log.__version__)
 
 CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2','f2','g2','h2','a3','b3','c3','d3','e3','f3','g3','h3'
 ,'a4','b4','c4','d4','e4','f4','g4','h4','a5','b5','c5','d5','e5','f5','g5','h5','a6','b6','c6','d6','e6','f6','g6','h6','a7',
@@ -24,19 +27,8 @@ whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move
 
 # ----------------------------------------------------------------------------------------
 # Label / Classification:
-result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
+# result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
 # ----------------------------------------------------------------------------------------
-
-# ----------------------------------------------------------------------------------------
-# Linear Model (Wide)
-# ----------------------------------------------------------------------------------------
-base_columns = feature_columns + [whos_move]
-crossed_columns = []
-
-# ----------------------------------------------------------------------------------------
-# Neural Network (Deep)
-# ----------------------------------------------------------------------------------------
-deep_columns = [ tf.feature_column.indicator_column(col) for col in feature_columns ] + [tf.feature_column.indicator_column(whos_move)]
 
 # ----------------------------------------------------------------------------------------
 # input_fn()
@@ -49,9 +41,20 @@ def input_fn(data_file, num_epochs, shuffle):
       verbose=True,
       engine="python",
       skiprows=1)
-  # remove NaN elements
+  # remove NaN elements (iff any NA values are present, drop that label)
   df_data = df_data.dropna(how="any", axis=0)
-  labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
+
+  # labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
+
+  # Trying categorical to int
+  df_data.result = pd.Categorical(df_data.result)
+  df_data['category'] = (df_data.result.cat.codes).astype(int) # dtype int64
+  print(df_data['category'])
+  labels = df_data['category']
+  print(labels)
+  # labels = tf.Variable(df_data['category'], tf.int64)
+  # labels = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
+
   return tf.estimator.inputs.pandas_input_fn(
       x=df_data,
       y=labels,
@@ -61,31 +64,36 @@ def input_fn(data_file, num_epochs, shuffle):
       num_threads=5)
 
 # ----------------------------------------------------------------------------------------
+# Linear Model (Wide)
+# ----------------------------------------------------------------------------------------
+base_columns = feature_columns # + [whos_move]
+crossed_columns = []
+
+# ----------------------------------------------------------------------------------------
+# Neural Network (Deep)
+# ----------------------------------------------------------------------------------------
+deep_columns = [ tf.feature_column.indicator_column(col) for col in feature_columns ]
+
+# ----------------------------------------------------------------------------------------
 # Combine the wide and deep models into one
 # ----------------------------------------------------------------------------------------
-model_dir = "output"
-m = tf.estimator.DNNLinearCombinedClassifier(
+model_dir = "output-try"
+estimator = tf.estimator.DNNLinearCombinedClassifier(
     model_dir=model_dir,
-    linear_feature_columns=crossed_columns,
-    dnn_feature_columns=deep_columns,
-    dnn_hidden_units=[20,12])
+    n_classes=3,
+    feature_columns=deep_columns,
+    hidden_units=[20,12])
 
 # ----------------------------------------------------------------------------------------
-# log the progress to the terminal
+# log the progress of train and eval to the terminal
 # ----------------------------------------------------------------------------------------
-import logging
-logging.getLogger().setLevel(logging.INFO)
-
+log.getLogger().setLevel(log.INFO)
 
 # set num_epochs to None to get infinite stream of data.
-m.train(
+estimator.train(
     input_fn=input_fn("data/train-data-10000.csv", num_epochs=None, shuffle=True),
-    steps=100)
+    steps=1000)
 # set steps to None to run evaluation until all data consumed.
-results = m.evaluate(
-    input_fn=input_fn("data/test-data-10000.csv", num_epochs=3, shuffle=False),
+results = estimator.evaluate(
+    input_fn=input_fn("data/test-data-10000.csv", num_epochs=1, shuffle=True),
     steps=None)
-
-# print("model directory = %s" % model_dir)
-# for key in sorted(results):
-#     print("%s: %s" % (key, results[key]))

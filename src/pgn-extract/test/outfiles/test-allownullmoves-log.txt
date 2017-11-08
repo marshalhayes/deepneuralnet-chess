@@ -1,0 +1,4 @@
+File infiles/test-allownullmoves.pgn: Line number: 11
+Null moves (--) only allowed in variations.
+File infiles/test-allownullmoves.pgn: Line number: 23
+Null moves (--) only allowed in variations.

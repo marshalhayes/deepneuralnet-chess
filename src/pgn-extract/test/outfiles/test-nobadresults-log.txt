@@ -1,0 +1,9 @@
+File infiles/test-nobadresults.pgn: Line number: 4
+Inconsistent result strings 1-0 vs 0-1 in the following game.
+
+File infiles/test-nobadresults.pgn: Line number: 5
+Inconsistent result strings 0-1 vs 1/2-1/2 in the following game.
+
+File infiles/test-nobadresults.pgn: Line number: 6
+Inconsistent result strings 1/2-1/2 vs 1-0 in the following game.
+

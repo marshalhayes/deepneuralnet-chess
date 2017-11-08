@@ -1,6 +1,6 @@
 from setuptools import setup
 
-REQUIRED_PACKAGES = ['pandas>=0.20.3']
+REQUIRED_PACKAGES = ['tensorflow>=1.4.0, pandas>=0.20.3']
 
 setup(
     name='trainer',

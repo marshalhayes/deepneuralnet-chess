@@ -1,8 +1,0 @@
-% Output the tags of the seven tag roster alphabetically.
-Black
-Date
-Event
-Result
-Round
-Site
-White

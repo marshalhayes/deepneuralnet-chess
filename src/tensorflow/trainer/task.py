@@ -1,99 +1,57 @@
 import tensorflow as tf
-# print("tensorflow", tf.__version__)
-import pandas as pd
-# print("pandas", pd.__version__)
+import numpy as np
 import logging as log
-# print(log.__version__)
 
 CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2','f2','g2','h2','a3','b3','c3','d3','e3','f3','g3','h3'
 ,'a4','b4','c4','d4','e4','f4','g4','h4','a5','b5','c5','d5','e5','f5','g5','h5','a6','b6','c6','d6','e6','f6','g6','h6','a7',
 'b7','c7','d7','e7','f7','g7','h7','a8','b8','c8','d8','e8','f8','g8','h8','whos_move','fen','result']
 
-# ----------------------------------------------------------------------------------------
-# Feature Columns:
-# initialize the feature_columns to none
-# ----------------------------------------------------------------------------------------
-feature_columns = [ None for i in range(64) ]
-for i, col in enumerate(CSV_COLUMNS):
-    if i >= 64:
-        break
-    # each col value can be one of 13 possibilities. Whatever it is, hash it...
-    feature_columns[i] = tf.feature_column.categorical_column_with_hash_bucket(col, hash_bucket_size=13)
+TRAINING_DATA = "trainer/data/train-data-10000.csv"
+TEST_DATA = "trainer/data/test-data-10000.csv"
 
-# ----------------------------------------------------------------------------------------
-# Categorical Columns:
-# ----------------------------------------------------------------------------------------
-whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move", ["w", "b"])
+def my_input_fn():
 
-# ----------------------------------------------------------------------------------------
-# Label / Classification:
-# result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
-# ----------------------------------------------------------------------------------------
+    # Preprocess your data here...
 
-# ----------------------------------------------------------------------------------------
-# input_fn()
-# ----------------------------------------------------------------------------------------
-def input_fn(data_file, num_epochs, shuffle):
-  df_data = pd.read_csv(
-      tf.gfile.Open(data_file),
-      names=CSV_COLUMNS,
-      skipinitialspace=True,
-      verbose=True,
-      engine="python",
-      skiprows=1)
-  # remove NaN elements (iff any NA values are present, drop that label)
-  df_data = df_data.dropna(how="any", axis=0)
+    # ...then return 1) a mapping of feature columns to Tensors with
+    # the corresponding feature data, and 2) a Tensor containing labels
+    return feature_cols, labels
 
-  # labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
+# Load datasets
+training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+      filename=TRAINING_DATA,
+      target_dtype=np.int,
+      features_dtype=np.float32)
+test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
+      filename=TEST_DATA,
+      target_dtype=np.int,
+      features_dtype=np.float32)
 
-  # Trying categorical to int
-  df_data.result = pd.Categorical(df_data.result)
-  df_data['category'] = (df_data.result.cat.codes).astype(int) # dtype int64
-  print(df_data['category'])
-  labels = df_data['category']
-  print(labels)
-  # labels = tf.Variable(df_data['category'], tf.int64)
-  # labels = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
+# Specify that all features have real-value data
+feature_columns = [tf.feature_column.numeric_column("x", shape[4])]
 
-  return tf.estimator.inputs.pandas_input_fn(
-      x=df_data,
-      y=labels,
-      batch_size=100,
-      num_epochs=num_epochs,
-      shuffle=shuffle,
-      num_threads=5)
+ # Build 3 layer DNN with 10, 20, 10 units respectively
+classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
+                                          hidden_units=[10, 20, 10],
+                                          n_classes=3,
+                                          model_dir="output")
+# Define the training inputs
+train_input_fn = tf.estimator.inputs.numpy_input_fn(
+      x={"x": np.array(training_set.data)},
+      y=np.array(training_set.target),
+      num_epochs=None,
+      shuffle=True)
 
-# ----------------------------------------------------------------------------------------
-# Linear Model (Wide)
-# ----------------------------------------------------------------------------------------
-base_columns = feature_columns # + [whos_move]
-crossed_columns = []
+# Train model
+classifier.train(input_fn=train_input_fn, steps=2000)
 
-# ----------------------------------------------------------------------------------------
-# Neural Network (Deep)
-# ----------------------------------------------------------------------------------------
-deep_columns = [ tf.feature_column.indicator_column(col) for col in feature_columns ]
+# Define the test inputs
+test_input_fn = tf.estimator.inputs.numpy_input_fn(
+      x={"x": np.array(test_set.data)},
+      y=np.array(test_set.target),
+      num_epochs=1,
+      shuffle=False)
 
-# ----------------------------------------------------------------------------------------
-# Combine the wide and deep models into one
-# ----------------------------------------------------------------------------------------
-model_dir = "output-try"
-estimator = tf.estimator.DNNLinearCombinedClassifier(
-    model_dir=model_dir,
-    n_classes=3,
-    feature_columns=deep_columns,
-    hidden_units=[20,12])
-
-# ----------------------------------------------------------------------------------------
-# log the progress of train and eval to the terminal
-# ----------------------------------------------------------------------------------------
-log.getLogger().setLevel(log.INFO)
-
-# set num_epochs to None to get infinite stream of data.
-estimator.train(
-    input_fn=input_fn("data/train-data-10000.csv", num_epochs=None, shuffle=True),
-    steps=1000)
-# set steps to None to run evaluation until all data consumed.
-results = estimator.evaluate(
-    input_fn=input_fn("data/test-data-10000.csv", num_epochs=1, shuffle=True),
-    steps=None)
+# Evaluate accuracy
+accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
+print("\nTest Accuracy: {0:f}\n".format(accuracy_score))

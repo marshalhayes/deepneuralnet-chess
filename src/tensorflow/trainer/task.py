@@ -1,6 +1,6 @@
+# from tqdm import tqdm
 import tensorflow as tf
 import pandas as pd
-
 
 CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2','f2','g2','h2','a3','b3','c3','d3','e3','f3','g3','h3'
 ,'a4','b4','c4','d4','e4','f4','g4','h4','a5','b5','c5','d5','e5','f5','g5','h5','a6','b6','c6','d6','e6','f6','g6','h6','a7',
@@ -22,8 +22,10 @@ for i, col in enumerate(CSV_COLUMNS):
 # ----------------------------------------------------------------------------------------
 whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move", ["w", "b"])
 
-# !!! LABEL (CLASSIFICATION) !!!
+# ----------------------------------------------------------------------------------------
+# Label / Classification:
 result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
+# ----------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------
 # Linear Model (Wide)
@@ -40,13 +42,11 @@ deep_columns = [ tf.feature_column.indicator_column(col) for col in feature_colu
 # input_fn()
 # ----------------------------------------------------------------------------------------
 def input_fn(data_file, num_epochs, shuffle):
-  """Input builder function."""
-  print("Reading input...")
   df_data = pd.read_csv(
       tf.gfile.Open(data_file),
       names=CSV_COLUMNS,
-      verbose=True,
       skipinitialspace=True,
+      verbose=True,
       engine="python",
       skiprows=1)
   # remove NaN elements
@@ -59,7 +59,6 @@ def input_fn(data_file, num_epochs, shuffle):
       num_epochs=num_epochs,
       shuffle=shuffle,
       num_threads=5)
-
 
 # ----------------------------------------------------------------------------------------
 # Combine the wide and deep models into one

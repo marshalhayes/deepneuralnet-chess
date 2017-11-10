@@ -27,6 +27,8 @@ The documentation for pgn-extract can be found on the University of Kent's CS de
 pgn-extract --nocomments --notags --novars --nomovenumbers -F -#500000,100 <filename.pgn>
 ```
 
+This command will read through <filename.pgn>, remove the unnecessary data, and create new .pgn files of 500,000 games each starting with name 1.pgn and incrementing then on.
+
 **Create the training/test data for tensorflow**
 After processing the data, I now have just the moves followed by a chess position (FEN) corresponding the the final position of the game, and the result of the game (1-0, 0-1, or 1/2-1/2). Using python, I convert the FEN as a row vector. Each column corresponds to one square of the chess board. If the square is empty, the entry is 0. If the square is occupied by a piece, for example a white rook, then the entry will be a capital R. If it was black's rook, then the entry would be a lowercase r. 
 If it was white's knight, then the entry will be a capital N and so on.

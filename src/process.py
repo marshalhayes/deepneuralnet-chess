@@ -18,7 +18,6 @@ def main():
                     row_vector.append(0) # if the elem is a number, set that number of preceeding elements to empty squares (0)
             else:
                 row_vector.append(elem) # if the elem is a piece (letter)
-
         return row_vector
 
     regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
@@ -33,17 +32,13 @@ def main():
                 if match is not None:
                     fen, result = match.group(0)[2:].split('}')[:2]
                     position, whosmove = fen.split(' ')[:2]
-
                     position = position[1:].replace('"', '')
                     rows = position.split('/')
-
                     row_vectors = []
                     position_vector = []
                     for row in rows:
                         row_vectors = vectorize_stripped_fen(row) + row_vectors
-
                     position_vector = row_vectors
-
                     outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + fen.replace('"', '') + "," + result.strip() + "\r\n")
 
 if __name__ == "__main__":

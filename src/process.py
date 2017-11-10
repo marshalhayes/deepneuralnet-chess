@@ -1,5 +1,10 @@
 import re
 import glob
+from tqdm import tqdm
+
+# ENHANCEMENTS:
+#   1. Terminal flags
+#       - specify filenames
 
 COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
 # returns row vector corresponding to row fen string
@@ -16,17 +21,15 @@ def vectorize_stripped_fen(fen_row_string):
     return row_vector
 
 regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
-outputfile = open('processed-output-fen_and_result.csv','wb')
+outputfile = open("processed-output.csv",'wb')
 outputfile.write(COLS_HEADERS + "\r\n")
 
-matchcount = 0
 for filename in glob.glob('*.pgn'):
     print("Reading " + filename + " ... ")
     with open(filename) as f:
-        for line in f:
+        for line in tqdm(f):
             match = re.search(regex, line)
             if match is not None:
-                matchcount += 1
                 fen, result = match.group(0)[2:].split('}')[:2]
                 position, whosmove = fen.split(' ')[:2]
 
@@ -41,4 +44,3 @@ for filename in glob.glob('*.pgn'):
                 position_vector = row_vectors
 
                 outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + fen.replace('"', '') + "," + result.strip() + "\r\n")
-                print(str(matchcount) + " matches found");

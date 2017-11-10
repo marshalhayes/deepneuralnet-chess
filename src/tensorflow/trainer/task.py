@@ -9,8 +9,7 @@ CSV_COLUMNS = ['a1','b1','c1','d1','e1','f1','g1','h1','a2','b2','c2','d2','e2',
 TRAINING_DATA = "trainer/data/train-data-10000.csv"
 TEST_DATA = "trainer/data/test-data-10000.csv"
 
-def my_input_fn():
-
+def input_fn():
     # Preprocess your data here...
 
     # ...then return 1) a mapping of feature columns to Tensors with

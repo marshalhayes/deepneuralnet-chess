@@ -25,9 +25,9 @@ def main():
     outputfile.write(COLS_HEADERS + "\r\n")
 
     for filename in glob.glob('*.pgn'):
-        print("Reading " + filename + " ... ")
+        # print("Reading " + filename + " ... ")
         with open(filename) as f:
-            for line in tqdm(f):
+            for line in tqdm(f, ascii=True, desc=filename):
                 match = re.search(regex, line)
                 if match is not None:
                     fen, result = match.group(0)[2:].split('}')[:2]

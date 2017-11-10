@@ -6,7 +6,7 @@ There are many chess databases with enormous amounts of data that would be great
 favorite places to play chess, [lichess.org](http://lichess.org). 
 
 lichess is an open source chess server. They compile datasets monthly from their entire user base. The most recent count 
-of the entire dataset was 241,127,059 games (approximately 47.4 GB compressed). For this project, I will just the datasets from 2017.
+of the entire dataset was 241,127,059 games (approximately 47.4 GB compressed). For this project, I will use only the datasets from 2017.
 
 **Processing the data**
 The dataset contains information that is unnecessary, even completely useless, for my project. 

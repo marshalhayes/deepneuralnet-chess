@@ -34,6 +34,10 @@ This command will read through <filename.pgn>, remove the unnecessary data, and 
 
 *I have already performed this process on the 2017-01 - 2017-10 datasets. You can download those directly from my Google Cloud Storage bucket http://storage.googleapis.com/lichess/processed/<2017-month>/processed-output.csv.*
 
+```
+wget http://storage.googleapis.com/lichess/processed/<2017-month>/processed-output.csv
+```
+
 After processing the data, I now have just the moves followed by a chess position (FEN) corresponding to the final position of the game, and the result of the game (1-0, 0-1, or 1/2-1/2). Using python, I convert the FEN as a row vector. Each column corresponds to one square of the chess board. If the square is empty, the entry is 0. If the square is occupied by a piece, for example a white rook, then the entry will be a capital R. If it was black's rook, then the entry would be a lowercase r. If it was white's knight, then the entry will be a capital N and so on.
 
 To create the training/test data, run the process.py script from the directory which contains the pgn files you wish to process. A new file will be created in the working directory entitled "processed-output.csv" which will contain 67 columns (64 squares, who's move it is, the fen position, and the result of the game). Each row corresponds to one chess position.

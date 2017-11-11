@@ -9,4 +9,4 @@ Due to the scale of the lichess dataset, I am using the Google Cloud Platform to
 
 ![cpu-usage graph](cpu-usage.png)
 
-As you can see from the graph above, pgn-extract takes much longer runtime as well as CPU usage than [process.py](deepneuralnet/process.py). This is certainly to be expected as the two are much different in terms of simplicity and operations. I am mainly displaying this graph to show that the process.py has a relatively quick runtime with low CPU usage even with millions of games. 
+As you can see from the graph above, pgn-extract takes much longer runtime as well as CPU usage than [process.py](deepneuralnet/process.py). This is certainly to be expected as the two are much different in terms of simplicity and operations. I am mainly displaying this graph to show that the runtime of process.py is relatively quick with low CPU usage even with millions of games. 

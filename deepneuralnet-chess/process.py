@@ -20,6 +20,9 @@ def main():
                 row_vector.append(elem) # if the elem is a piece (letter)
         return row_vector
 
+    def get_num_lines(filename):
+        return sum(1 for line in open(filename))
+
     regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
     outputfile = open("processed-output.csv",'wb')
     outputfile.write(COLS_HEADERS + "\r\n")
@@ -27,7 +30,7 @@ def main():
     for filename in glob.glob('*.pgn'):
         # print("Reading " + filename + " ... ")
         with open(filename) as f:
-            for line in tqdm(f, ascii=True, desc=filename):
+            for line in tqdm(f, ascii=True, desc=filename, total=get_num_lines(filename)):
                 match = re.search(regex, line)
                 if match is not None:
                     fen, result = match.group(0)[2:].split('}')[:2]

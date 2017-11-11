@@ -8,6 +8,8 @@ favorite places to play chess, [lichess.org](http://lichess.org).
 
 lichess is an open source chess server. They compile datasets monthly from their entire user base. The most recent count of the entire dataset at the time of this project was 241,127,059 games (approximately 47.4 GB compressed). For this project, I will use only the datasets from 2017.
 
+You can download the original datasets from [database.lichess.org](https://database.lichess.org/). If you do not plan on processing the data yourself, you can skip to "Create the training/test data for @tensorflow". 
+
 **Processing the data**
 
 The dataset contains information that is unnecessary, even completely useless, for my project.

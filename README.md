@@ -32,7 +32,7 @@ This command will read through <filename.pgn>, remove the unnecessary data, and 
 
 **Create the training/test data for @tensorflow**
 
-*I have already performed this process on the 2017-01 - 2017-10 datasets. You can download those directly from my Google Cloud Storage bucket*
+*I have already performed this process on the 2017-01 - 2017-10 datasets. You can download those directly from my Google Cloud Storage bucket:*
 
 ```
 curl -O http://storage.googleapis.com/lichess/processed/<2017-month>/processed-output.csv

@@ -30,7 +30,7 @@ def main():
         outputfile.write(COLS_HEADERS + "\r\n")
 
         with open(filename) as f:
-            for line in tqdm(f, ascii=True, desc=filename, total=get_num_lines(filename)):
+            for line in tqdm(f, ascii=True, desc=filename + " > " + filename + ".csv", total=get_num_lines(filename)):
                 match = re.search(regex, line)
                 if match is not None:
                     fen, result = match.group(0)[2:].split('}')[:2]

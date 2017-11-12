@@ -21,6 +21,7 @@ for i, col in enumerate(CSV_COLUMNS):
 whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move", ["w", "b"])
 
 # !!! LABEL (CLASSIFICATION) !!!
+# What does this actually do? {result} is never used anywhere
 result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
 
 # ----------------------------------------------------------------------------------------

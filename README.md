@@ -5,6 +5,8 @@ Given a chess position as input, predict the most likely result of the game.
 
 After only 3,000 steps and 500,000 games the model is able to predict with 91% accuracy the results of another 500,000 games.
 
+![tensorflow results](charts/output.png)
+
 ```
 accuracy: 0.90676
 average_loss: 0.476108

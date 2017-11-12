@@ -1,6 +1,9 @@
 import tensorflow as tf
 import pandas as pd
 
+TRAINING_DATA = "../data/2017-09-15.pgn.csv"
+TEST_DATA = "../data/2017-03-1.pgn.csv"
+
 COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
 CSV_COLUMNS = COLS_HEADERS.split(',')
 
@@ -61,7 +64,6 @@ def input_fn(data_file, num_epochs, shuffle):
       shuffle=shuffle,
       num_threads=5)
 
-
 # ----------------------------------------------------------------------------------------
 # Combine the wide and deep models into one
 # ----------------------------------------------------------------------------------------
@@ -79,16 +81,18 @@ m = tf.estimator.DNNLinearCombinedClassifier(
 import logging
 logging.getLogger().setLevel(logging.INFO)
 
-
+# ----------------------------------------------------------------------------------------
+# starting training/evaluation
+# ----------------------------------------------------------------------------------------
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("../data/2017-09-15.pgn.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn(TRAINING_DATA, num_epochs=None, shuffle=True),
     steps=1000)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("../data/2017-03-1.pgn.csv", num_epochs=1, shuffle=False),
+    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
     steps=None)
 
-# print("model directory = %s" % model_dir)
-# for key in sorted(results):
-#     print("%s: %s" % (key, results[key]))
+# Output all the results from evaluation
+for key in sorted(results):
+    print("%s: %s" % (key, results[key]))

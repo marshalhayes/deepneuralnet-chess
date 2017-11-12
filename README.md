@@ -49,3 +49,8 @@ To create the training/test data, run the process.py script from the directory w
 ```
 python process.py
 ```
+
+If you want to create individual files for each .pgn in the working directory:
+```
+python process-v2.py
+```

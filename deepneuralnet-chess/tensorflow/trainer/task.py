@@ -50,7 +50,9 @@ def input_fn(data_file, num_epochs, shuffle):
       skiprows=1)
   # remove NaN elements
   df_data = df_data.dropna(how="any", axis=0)
-  labels = df_data["result"].apply(lambda x: "1-0" in x).astype(int)
+  # labels = df_data["result"].astype("category").cat.codes
+  labels = df_data["result"].astype("category").cat.codes.astype(int)
+  print(labels)
   return tf.estimator.inputs.pandas_input_fn(
       x=df_data,
       y=labels,
@@ -66,6 +68,7 @@ def input_fn(data_file, num_epochs, shuffle):
 model_dir = "output"
 m = tf.estimator.DNNLinearCombinedClassifier(
     model_dir=model_dir,
+    n_classes=3,
     linear_feature_columns=crossed_columns,
     dnn_feature_columns=deep_columns,
     dnn_hidden_units=[20,12])
@@ -79,11 +82,11 @@ logging.getLogger().setLevel(logging.INFO)
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("../data/2017-03-1.pgn.csv", num_epochs=None, shuffle=True),
+    input_fn=input_fn("../data/2017-09-15.pgn.csv", num_epochs=None, shuffle=True),
     steps=1000)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("../data/2017-05-13.pgn.csv", num_epochs=1, shuffle=False),
+    input_fn=input_fn("../data/2017-03-1.pgn.csv", num_epochs=1, shuffle=False),
     steps=None)
 
 # print("model directory = %s" % model_dir)

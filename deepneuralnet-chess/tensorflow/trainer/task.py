@@ -79,11 +79,11 @@ logging.getLogger().setLevel(logging.INFO)
 
 # set num_epochs to None to get infinite stream of data.
 m.train(
-    input_fn=input_fn("data/train-data-10000.csv", num_epochs=None, shuffle=True),
-    steps=100)
+    input_fn=input_fn("../data/1.pgn.csv", num_epochs=None, shuffle=True),
+    steps=1000)
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn("data/test-data-10000.csv", num_epochs=3, shuffle=False),
+    input_fn=input_fn("../data/2.pgn.csv", num_epochs=1, shuffle=False),
     steps=None)
 
 # print("model directory = %s" % model_dir)

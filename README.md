@@ -36,7 +36,7 @@ To achieve these results, I performed the following steps:
   4. Evaluate the results with a separate data file
   5. Predict the results on a third, separate data file
 
-It should be noted that each data file from the dataset contains only positions obtained from *final* positions. These positions are not necessarily labeled correctly due to the fact that the dataset contains "noisy" data. For example, some games in the lichess dataset end after the first move. In addition, some players may win on time in a completely lost position. This should not be much of a problem because of the size of the dataset (The majority of games in the dataset, as far as I can tell, are fairly accurately labeled).
+It should be noted that each data file from the dataset contains only positions obtained from *final* positions. These positions are not necessarily labeled correctly due to the fact that the dataset contains "noisy" data. For example, some games in the lichess dataset end after the first move. In addition, some players may win on time in a completely lost position. This should not be much of a problem because of the size of the dataset (The majority of games in the dataset, as far as I can tell, are fairly accurately labeled). And, regardless, the model still has accuracy 91% :)
 
 **Installation**
 

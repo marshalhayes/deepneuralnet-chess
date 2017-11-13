@@ -2,4 +2,5 @@
 *.csv
 *.pgn
 output
+data
 __pycache__

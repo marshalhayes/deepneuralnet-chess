@@ -88,11 +88,28 @@ logging.getLogger().setLevel(logging.INFO)
 m.train(
     input_fn=input_fn(TRAINING_DATA, num_epochs=None, shuffle=True),
     steps=1000)
-# set steps to None to run evaluation until all data consumed.
-results = m.evaluate(
-    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
-    steps=None)
 
+# ----------------------------------------------------------------------------------------
+# Evaluate the trained model
+# ----------------------------------------------------------------------------------------
+# set steps to None to run evaluation until all data consumed.
+# results = m.evaluate(
+#     input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
+#     steps=None)
 # Output all the results from evaluation
-for key in sorted(results):
-    print("%s: %s" % (key, results[key]))
+# for key in sorted(results):
+#     print("%s: %s" % (key, results[key]))
+
+# ----------------------------------------------------------------------------------------
+# Predict on a new, unseen dataset
+# ----------------------------------------------------------------------------------------
+prediction = m.predict(
+    input_fn=input_fn("../data/2017-05-13/xaa", num_epochs=1, shuffle=True),
+    predict_keys=None,
+    hooks=None,
+    checkpoint_path=None
+)
+for i in prediction:
+    # i["probabilities"] is [probability white wins, probability black wins, probability of draw]
+    # chosen class 0 if white wins, 1 if black wins, 2 if draw
+    print("probabilties:", i["probabilities"], "chosen class:", i["classes"])

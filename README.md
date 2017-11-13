@@ -16,17 +16,17 @@ loss: 47.61
 
 *Predictions*
 ```
-probabilties: [ 0.0296672   0.91820359  0.05212923] chosen class: [b'1']
-probabilties: [ 0.06226279  0.91660774  0.02112948] chosen class: [b'1']
-probabilties: [ 0.02054318  0.96982062  0.00963628] chosen class: [b'1']
-probabilties: [ 0.96740705  0.01741911  0.01517385] chosen class: [b'0']
-probabilties: [ 0.89757091  0.06787788  0.0345512 ] chosen class: [b'0']
-probabilties: [ 0.76199377  0.18941474  0.04859152] chosen class: [b'0']
-probabilties: [ 0.89133453  0.07756244  0.031103  ] chosen class: [b'0']
-probabilties: [ 0.05278158  0.88749135  0.05972703] chosen class: [b'1']
-probabilties: [ 0.8450852   0.11540441  0.03951045] chosen class: [b'0']
-probabilties: [ 0.0447174   0.94274729  0.01253523] chosen class: [b'1']
-probabilties: [ 0.02849682  0.91842002  0.05308311] chosen class: [b'1']
+probabilities: [ 0.0296672   0.91820359  0.05212923] chosen class: [b'1']
+probabilities: [ 0.06226279  0.91660774  0.02112948] chosen class: [b'1']
+probabilities: [ 0.02054318  0.96982062  0.00963628] chosen class: [b'1']
+probabilities: [ 0.96740705  0.01741911  0.01517385] chosen class: [b'0']
+probabilities: [ 0.89757091  0.06787788  0.0345512 ] chosen class: [b'0']
+probabilities: [ 0.76199377  0.18941474  0.04859152] chosen class: [b'0']
+probabilities: [ 0.89133453  0.07756244  0.031103  ] chosen class: [b'0']
+probabilities: [ 0.05278158  0.88749135  0.05972703] chosen class: [b'1']
+probabilities: [ 0.8450852   0.11540441  0.03951045] chosen class: [b'0']
+probabilities: [ 0.0447174   0.94274729  0.01253523] chosen class: [b'1']
+probabilities: [ 0.02849682  0.91842002  0.05308311] chosen class: [b'1']
 ```
 
 To achieve these results, I performed the following steps:
@@ -121,3 +121,5 @@ By default, the model directory is located in deepneuralnet-chess/tensorflow/out
 ```
 tensorboard --logdir=<path_to_output_directory>
 ```
+
+task.py also predicts the results of another dataset (PRED_DATA) and outputs the results to the terminal.

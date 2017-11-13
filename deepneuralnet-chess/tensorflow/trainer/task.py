@@ -93,18 +93,18 @@ m.train(
 # Evaluate the trained model
 # ----------------------------------------------------------------------------------------
 # set steps to None to run evaluation until all data consumed.
-# results = m.evaluate(
-#     input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
-#     steps=None)
+results = m.evaluate(
+    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
+    steps=None)
 # Output all the results from evaluation
-# for key in sorted(results):
-#     print("%s: %s" % (key, results[key]))
+for key in sorted(results):
+    print("%s: %s" % (key, results[key]))
 
 # ----------------------------------------------------------------------------------------
 # Predict on a new, unseen dataset
 # ----------------------------------------------------------------------------------------
 prediction = m.predict(
-    input_fn=input_fn("../data/2017-05-13/xar", num_epochs=1, shuffle=True),
+    input_fn=input_fn("../data/2017-05-13/xar", num_epochs=1, shuffle=False),
     predict_keys=['probabilities','classes'],
     hooks=None,
     checkpoint_path=None

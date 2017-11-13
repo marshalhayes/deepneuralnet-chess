@@ -22,6 +22,16 @@ To achieve these results, I performed the following steps:
 
 It should be noted that each data file from the dataset contains only positions obtained from *final* positions. These positions are not necessarily labeled correctly due to the fact that the dataset contains "noisy" data. For example, some games in the lichess dataset end after the first move. In addition, some players may win on time in a completely lost position. This should not be much of a problem because of the size of the dataset (The majority of games in the dataset, as far as I can tell, are fairly accurately labeled).
 
+**Installation**
+
+Install the requirements:
+
+```
+pip install -r requirements.txt
+```
+
+If everything worked properly, then you are all set!
+
 **The dataset**
 
 There are many chess databases with enormous amounts of data that would be great for this project. I chose one of my favorite places to play chess, [lichess.org](http://lichess.org).

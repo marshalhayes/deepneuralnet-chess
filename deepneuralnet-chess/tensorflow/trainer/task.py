@@ -104,8 +104,8 @@ m.train(
 # Predict on a new, unseen dataset
 # ----------------------------------------------------------------------------------------
 prediction = m.predict(
-    input_fn=input_fn("../data/2017-05-13/xaa", num_epochs=1, shuffle=True),
-    predict_keys=None,
+    input_fn=input_fn("../data/2017-05-13/xar", num_epochs=1, shuffle=True),
+    predict_keys=['probabilities','classes'],
     hooks=None,
     checkpoint_path=None
 )

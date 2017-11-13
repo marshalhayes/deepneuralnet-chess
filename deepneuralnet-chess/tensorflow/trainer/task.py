@@ -1,116 +1,201 @@
+import argparse
+import os
+
+import model
+
 import tensorflow as tf
-import pandas as pd
+from tensorflow.contrib.learn.python.learn import learn_runner
+from tensorflow.contrib.learn.python.learn.estimators import run_config
+from tensorflow.contrib.learn.python.learn.utils import (
+    saved_model_export_utils)
+from tensorflow.contrib.training.python.training import hparam
 
-# TRAINING_DATA = "../data/2017-05-13.pgn.csv"
-# TEST_DATA = "../data/2017-09-15.pgn.csv"
-# PRED_DATA = "../data/2017-05-13/xar"
 
-COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
-CSV_COLUMNS = COLS_HEADERS.split(',')
+def generate_experiment_fn(**experiment_args):
+  """Create an experiment function.
 
-# ----------------------------------------------------------------------------------------
-# Feature Columns:
-# initialize the feature_columns to none
-# ----------------------------------------------------------------------------------------
-feature_columns = [ None for i in range(64) ]
-for i, col in enumerate(CSV_COLUMNS):
-    if i >= 64:
-        break
-    # each col value can be one of 13 possibilities. Whatever it is, hash it...
-    feature_columns[i] = tf.feature_column.categorical_column_with_hash_bucket(col, hash_bucket_size=13)
+  See command line help text for description of args.
+  Args:
+    experiment_args: keyword arguments to be passed through to experiment
+      See `tf.contrib.learn.Experiment` for full args.
+  Returns:
+    A function:
+      (tf.contrib.learn.RunConfig, tf.contrib.training.HParams) -> Experiment
 
-# ----------------------------------------------------------------------------------------
-# Categorical Columns:
-# ----------------------------------------------------------------------------------------
-whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move", ["w", "b"])
-
-# !!! LABEL (CLASSIFICATION) !!!
-# What does this actually do? {result} is never used anywhere
-result = tf.feature_column.categorical_column_with_vocabulary_list("result", ["1-0", "0-1", "1/2-1/2"])
-
-# ----------------------------------------------------------------------------------------
-# Linear Model (Wide)
-# ----------------------------------------------------------------------------------------
-base_columns = feature_columns + [whos_move]
-crossed_columns = []
-
-# ----------------------------------------------------------------------------------------
-# Neural Network (Deep)
-# ----------------------------------------------------------------------------------------
-deep_columns = [ tf.feature_column.indicator_column(col) for col in feature_columns ] + [tf.feature_column.indicator_column(whos_move)]
-
-# ----------------------------------------------------------------------------------------
-# input_fn()
-# ----------------------------------------------------------------------------------------
-def input_fn(data_file, num_epochs, shuffle):
-  """Input builder function."""
-  print("Reading input...")
-  df_data = pd.read_csv(
-      tf.gfile.Open(data_file),
-      names=CSV_COLUMNS,
-      verbose=True,
-      skipinitialspace=True,
-      engine="python",
-      skiprows=1)
-  # remove NaN elements
-  df_data = df_data.dropna(how="any", axis=0)
-  # labels = df_data["result"].astype("category").cat.codes
-  labels = df_data["result"].astype("category").cat.codes.astype(int)
-  print(labels)
-  return tf.estimator.inputs.pandas_input_fn(
-      x=df_data,
-      y=labels,
-      batch_size=100,
-      num_epochs=num_epochs,
-      shuffle=shuffle,
-      num_threads=5)
-
-# ----------------------------------------------------------------------------------------
-# Combine the wide and deep models into one
-# ----------------------------------------------------------------------------------------
-model_dir = "output"
-m = tf.contrib.learn.DNNClassifier(
-        model_dir=model_dir,
-        n_classes=3,
-        feature_columns=deep_columns,
-        hidden_units=[20,12,10]
+    This function is used by learn_runner to create an Experiment which
+    executes model code provided in the form of an Estimator and
+    input functions.
+  """
+  def _experiment_fn(run_config, hparams):
+    # num_epochs can control duration if train_steps isn't
+    # passed to Experiment
+    train_input = lambda: model.generate_input_fn(
+        hparams.train_files,
+        num_epochs=hparams.num_epochs,
+        batch_size=hparams.train_batch_size,
     )
+    # Don't shuffle evaluation data
+    eval_input = lambda: model.generate_input_fn(
+        hparams.eval_files,
+        batch_size=hparams.eval_batch_size,
+        shuffle=False
+    )
+    return tf.contrib.learn.Experiment(
+        model.build_estimator(
+            embedding_size=hparams.embedding_size,
+            # Construct layers sizes with exponetial decay
+            hidden_units=[
+                max(2, int(hparams.first_layer_size *
+                           hparams.scale_factor**i))
+                for i in range(hparams.num_layers)
+            ],
+            config=run_config
+        ),
+        train_input_fn=train_input,
+        eval_input_fn=eval_input,
+        **experiment_args
+    )
+  return _experiment_fn
 
-# ----------------------------------------------------------------------------------------
-# log the progress to the terminal
-# ----------------------------------------------------------------------------------------
-import logging
-logging.getLogger().setLevel(logging.INFO)
 
-# ----------------------------------------------------------------------------------------
-# starting training/evaluation
-# ----------------------------------------------------------------------------------------
-# set num_epochs to None to get infinite stream of data.
-m.fit(
-    input_fn=input_fn(TRAINING_DATA, num_epochs=None, shuffle=True),
-    steps=1000)
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  # Input Arguments
+  parser.add_argument(
+      '--train-files',
+      help='GCS or local paths to training data',
+      nargs='+',
+      required=True
+  )
+  parser.add_argument(
+      '--num-epochs',
+      help="""\
+      Maximum number of training data epochs on which to train.
+      If both --max-steps and --num-epochs are specified,
+      the training job will run for --max-steps or --num-epochs,
+      whichever occurs first. If unspecified will run for --max-steps.\
+      """,
+      type=int,
+  )
+  parser.add_argument(
+      '--train-batch-size',
+      help='Batch size for training steps',
+      type=int,
+      default=40
+  )
+  parser.add_argument(
+      '--eval-batch-size',
+      help='Batch size for evaluation steps',
+      type=int,
+      default=40
+  )
+  parser.add_argument(
+      '--eval-files',
+      help='GCS or local paths to evaluation data',
+      nargs='+',
+      required=True
+  )
+  # Training arguments
+  parser.add_argument(
+      '--embedding-size',
+      help='Number of embedding dimensions for categorical columns',
+      default=8,
+      type=int
+  )
+  parser.add_argument(
+      '--first-layer-size',
+      help='Number of nodes in the first layer of the DNN',
+      default=100,
+      type=int
+  )
+  parser.add_argument(
+      '--num-layers',
+      help='Number of layers in the DNN',
+      default=4,
+      type=int
+  )
+  parser.add_argument(
+      '--scale-factor',
+      help='How quickly should the size of the layers in the DNN decay',
+      default=0.7,
+      type=float
+  )
+  parser.add_argument(
+      '--job-dir',
+      help='GCS location to write checkpoints and export models',
+      required=True
+  )
 
-# ----------------------------------------------------------------------------------------
-# Evaluate the trained model
-# ----------------------------------------------------------------------------------------
-# set steps to None to run evaluation until all data consumed.
-results = m.evaluate(
-    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=False),
-    steps=None)
-# Output all the results from evaluation
-for key in sorted(results):
-    print("%s: %s" % (key, results[key]))
+  # Argument to turn on all logging
+  parser.add_argument(
+      '--verbosity',
+      choices=[
+          'DEBUG',
+          'ERROR',
+          'FATAL',
+          'INFO',
+          'WARN'
+      ],
+      default='INFO',
+  )
+  # Experiment arguments
+  parser.add_argument(
+      '--eval-delay-secs',
+      help='How long to wait before running first evaluation',
+      default=10,
+      type=int
+  )
+  parser.add_argument(
+      '--min-eval-frequency',
+      help='Minimum number of training steps between evaluations',
+      default=None,  # Use TensorFlow's default (currently, 1000 on GCS)
+      type=int
+  )
+  parser.add_argument(
+      '--train-steps',
+      help="""\
+      Steps to run the training job for. If --num-epochs is not specified,
+      this must be. Otherwise the training job will run indefinitely.\
+      """,
+      type=int
+  )
+  parser.add_argument(
+      '--eval-steps',
+      help='Number of steps to run evalution for at each checkpoint',
+      default=100,
+      type=int
+  )
+  parser.add_argument(
+      '--export-format',
+      help='The input format of the exported SavedModel binary',
+      choices=['JSON', 'CSV', 'EXAMPLE'],
+      default='JSON'
+  )
 
-# ----------------------------------------------------------------------------------------
-# Predict on a new, unseen dataset
-# ----------------------------------------------------------------------------------------
-# prediction = m.predict(
-#     input_fn=input_fn(PRED_DATA, num_epochs=1, shuffle=False),
-#     predict_keys=['probabilities','classes'],
-#     hooks=None,
-#     checkpoint_path=None
-# )
-# for i in prediction:
-#     # i["probabilities"] is [probability white wins, probability black wins, probability of draw]
-#     # chosen class 0 if white wins, 1 if black wins, 2 if draw
-#     print("probabilities:", i["probabilities"], "chosen class:", i["classes"])
+  args = parser.parse_args()
+
+  # Set python level verbosity
+  tf.logging.set_verbosity(args.verbosity)
+  # Set C++ Graph Execution level verbosity
+  os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(
+      tf.logging.__dict__[args.verbosity] / 10)
+
+  # Run the training job
+  # learn_runner pulls configuration information from environment
+  # variables using tf.learn.RunConfig and uses this configuration
+  # to conditionally execute Experiment, or param server code
+  learn_runner.run(
+      generate_experiment_fn(
+          min_eval_frequency=args.min_eval_frequency,
+          eval_delay_secs=args.eval_delay_secs,
+          train_steps=args.train_steps,
+          eval_steps=args.eval_steps,
+          export_strategies=[saved_model_export_utils.make_export_strategy(
+              model.SERVING_FUNCTIONS[args.export_format],
+              exports_to_keep=1,
+              default_output_alternative_key=None,
+          )]
+      ),
+      run_config=run_config.RunConfig(model_dir=args.job_dir),
+      hparams=hparam.HParams(**args.__dict__)
+  )

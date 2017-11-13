@@ -112,4 +112,4 @@ prediction = m.predict(
 for i in prediction:
     # i["probabilities"] is [probability white wins, probability black wins, probability of draw]
     # chosen class 0 if white wins, 1 if black wins, 2 if draw
-    print("probabilties:", i["probabilities"], "chosen class:", i["classes"])
+    print("probabilities:", i["probabilities"], "chosen class:", i["classes"])

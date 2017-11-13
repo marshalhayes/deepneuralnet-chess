@@ -1,9 +1,9 @@
 import tensorflow as tf
 import pandas as pd
 
-TRAINING_DATA = "../data/2017-09-15.pgn.csv"
-TEST_DATA = "../data/2017-03-1.pgn.csv"
-PRED_DATA = "../data/2017-05-13/xar"
+# TRAINING_DATA = "../data/2017-05-13.pgn.csv"
+# TEST_DATA = "../data/2017-09-15.pgn.csv"
+# PRED_DATA = "../data/2017-05-13/xar"
 
 COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
 CSV_COLUMNS = COLS_HEADERS.split(',')
@@ -69,12 +69,12 @@ def input_fn(data_file, num_epochs, shuffle):
 # Combine the wide and deep models into one
 # ----------------------------------------------------------------------------------------
 model_dir = "output"
-m = tf.estimator.DNNLinearCombinedClassifier(
-    model_dir=model_dir,
-    n_classes=3,
-    linear_feature_columns=crossed_columns,
-    dnn_feature_columns=deep_columns,
-    dnn_hidden_units=[20,12])
+m = tf.contrib.learn.DNNClassifier(
+        model_dir=model_dir,
+        n_classes=3,
+        feature_columns=deep_columns,
+        hidden_units=[20,12,10]
+    )
 
 # ----------------------------------------------------------------------------------------
 # log the progress to the terminal
@@ -86,7 +86,7 @@ logging.getLogger().setLevel(logging.INFO)
 # starting training/evaluation
 # ----------------------------------------------------------------------------------------
 # set num_epochs to None to get infinite stream of data.
-m.train(
+m.fit(
     input_fn=input_fn(TRAINING_DATA, num_epochs=None, shuffle=True),
     steps=1000)
 
@@ -95,7 +95,7 @@ m.train(
 # ----------------------------------------------------------------------------------------
 # set steps to None to run evaluation until all data consumed.
 results = m.evaluate(
-    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=True),
+    input_fn=input_fn(TEST_DATA, num_epochs=1, shuffle=False),
     steps=None)
 # Output all the results from evaluation
 for key in sorted(results):
@@ -104,13 +104,13 @@ for key in sorted(results):
 # ----------------------------------------------------------------------------------------
 # Predict on a new, unseen dataset
 # ----------------------------------------------------------------------------------------
-prediction = m.predict(
-    input_fn=input_fn(PRED_DATA, num_epochs=1, shuffle=False),
-    predict_keys=['probabilities','classes'],
-    hooks=None,
-    checkpoint_path=None
-)
-for i in prediction:
-    # i["probabilities"] is [probability white wins, probability black wins, probability of draw]
-    # chosen class 0 if white wins, 1 if black wins, 2 if draw
-    print("probabilities:", i["probabilities"], "chosen class:", i["classes"])
+# prediction = m.predict(
+#     input_fn=input_fn(PRED_DATA, num_epochs=1, shuffle=False),
+#     predict_keys=['probabilities','classes'],
+#     hooks=None,
+#     checkpoint_path=None
+# )
+# for i in prediction:
+#     # i["probabilities"] is [probability white wins, probability black wins, probability of draw]
+#     # chosen class 0 if white wins, 1 if black wins, 2 if draw
+#     print("probabilities:", i["probabilities"], "chosen class:", i["classes"])

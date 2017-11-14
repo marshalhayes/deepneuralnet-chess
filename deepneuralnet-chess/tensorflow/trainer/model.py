@@ -1,13 +1,3 @@
-# Copyright 2016 Google Inc. All Rights Reserved. Licensed under the Apache
-# License, Version 2.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under
-# the License.
 
 """Define a Wide + Deep model for classification on structured data."""
 
@@ -30,22 +20,20 @@ LABELS = ['1-0', '0-1', '1/2-1/2']
 
 # ----------------------------------------------------------------------------------------
 # Feature Columns:
-# initialize the INPUT_COLUMNS to none
+# initialize the INPUT_COLUMNS
 # ----------------------------------------------------------------------------------------
-INPUT_COLUMNS = [ None for i in range(64) ]
 INPUT_COLUMNS = [ tf.feature_column.categorical_column_with_vocabulary_list(
     col, ['0','r','R','n','N','b','B','q','Q','k','K','p','P']) for i, col in enumerate(CSV_COLUMNS) if i < 64 ]
 
 # ----------------------------------------------------------------------------------------
 # Categorical Columns:
-# ----------------------------------------------------------------------------------------
 # Is who's move it is really important? Perhaps not.
+# ----------------------------------------------------------------------------------------
 # whos_move = tf.feature_column.categorical_column_with_vocabulary_list("whos_move", ["w", "b"])
 # INPUT_COLUMNS.append(whos_move)
 
 UNUSED_COLUMNS = set(CSV_COLUMNS) - {col.name for col in INPUT_COLUMNS} - \
     {LABEL_COLUMN}
-
 
 def build_estimator(config, embedding_size=8, hidden_units=None):
   (a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,

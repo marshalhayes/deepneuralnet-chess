@@ -3,31 +3,12 @@ Given a chess position as input, predict the most likely result of the game.
 
 **Results**
 
-After only 3,000 steps and 500,000 games the model is able to predict with 91% accuracy the results of another 500,000 games.
+Coming soon
 
-![tensorflow results](charts/output.png)
-
-```
-accuracy: 0.90676
-average_loss: 0.476108
-global_step: 3000
-loss: 47.61
-```
 
 *Predictions*
 ```
-probabilities: [ 0.0296672   0.91820359  0.05212923] chosen class: [b'1']
-probabilities: [ 0.06226279  0.91660774  0.02112948] chosen class: [b'1']
-probabilities: [ 0.02054318  0.96982062  0.00963628] chosen class: [b'1']
-probabilities: [ 0.96740705  0.01741911  0.01517385] chosen class: [b'0']
-probabilities: [ 0.89757091  0.06787788  0.0345512 ] chosen class: [b'0']
-probabilities: [ 0.76199377  0.18941474  0.04859152] chosen class: [b'0']
-probabilities: [ 0.89133453  0.07756244  0.031103  ] chosen class: [b'0']
-probabilities: [ 0.05278158  0.88749135  0.05972703] chosen class: [b'1']
-probabilities: [ 0.8450852   0.11540441  0.03951045] chosen class: [b'0']
-probabilities: [ 0.0447174   0.94274729  0.01253523] chosen class: [b'1']
-probabilities: [ 0.02849682  0.91842002  0.05308311] chosen class: [b'1']
-```
+Coming soon.
 
 To achieve these results, I performed the following steps:
   1. Process the dataset
@@ -36,7 +17,7 @@ To achieve these results, I performed the following steps:
   4. Evaluate the results with a separate data file
   5. Predict the results on a third, separate data file
 
-It should be noted that each data file from the dataset contains only positions obtained from *final* positions. These positions are not necessarily labeled correctly due to the fact that the dataset contains "noisy" data. For example, some games in the lichess dataset end after the first move. In addition, some players may win on time in a completely lost position. This should not be much of a problem because of the size of the dataset (The majority of games in the dataset, as far as I can tell, are fairly accurately labeled). And, regardless, the model still has accuracy 91% :)
+It should be noted that each data file from the dataset contains only positions obtained from *final* positions. These positions are not necessarily labeled correctly due to the fact that the dataset contains "noisy" data. For example, some games in the lichess dataset end after the first move. In addition, some players may win on time in a completely lost position. This should not be much of a problem because of the size of the dataset (The majority of games in the dataset, as far as I can tell, are fairly accurately labeled).
 
 **Installation**
 
@@ -108,18 +89,4 @@ python process-v2.py
 
 **Training the model**
 
-Now that we have the datasets in a format that tensorflow can understand we are ready to start training! To start training, run task.py:
-
-```
-python task.py
-```
-
-This python file will read the data and convert each item in the TRAINING_DATA and TEST_DATA into tensors. After reading and learning the data, task.py will start evaluating the results. Once it finishes, you can visualize the results using tensorboard:
-
-By default, the model directory is located in deepneuralnet-chess/tensorflow/output.
-
-```
-tensorboard --logdir=<path_to_output_directory>
-```
-
-task.py also predicts the results of another dataset (PRED_DATA) and outputs the results to the terminal.
+Coming soon

@@ -24,7 +24,7 @@ import tensorflow as tf
 COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
 CSV_COLUMNS = COLS_HEADERS.split(',')
 
-CSV_COLUMN_DEFAULTS = [ [0] for col in CSV_COLUMNS ]
+CSV_COLUMN_DEFAULTS = [ ['0'] for col in CSV_COLUMNS ]
 LABEL_COLUMN = 'result'
 LABELS = ['1-0', '0-1', '1/2-1/2']
 
@@ -33,14 +33,8 @@ LABELS = ['1-0', '0-1', '1/2-1/2']
 # initialize the INPUT_COLUMNS to none
 # ----------------------------------------------------------------------------------------
 INPUT_COLUMNS = [ None for i in range(64) ]
-
-for i, col in enumerate(CSV_COLUMNS):
-    if i >= 64:
-        break # only use the 64 squares as INPUT_COLUMNS
-    # each col value can be one of 13 possibilities. Whatever it is, hash it...
-    INPUT_COLUMNS[i] = tf.feature_column.categorical_column_with_vocabulary_list(
-        col, ['0','r','R','n','N','b','B','q','Q','k','K','p','P']
-    )
+INPUT_COLUMNS = [ tf.feature_column.categorical_column_with_vocabulary_list(
+    col, ['0','r','R','n','N','b','B','q','Q','k','K','p','P']) for i, col in enumerate(CSV_COLUMNS) if i < 64 ]
 
 # ----------------------------------------------------------------------------------------
 # Categorical Columns:
@@ -218,7 +212,7 @@ def generate_input_fn(filenames,
       A function () -> (features, indices) where features is a dictionary of
         Tensors, and indices is a single Tensor of label indices.
   """
-  filename_queue = tf.train.string_input_producer(
+  filename_queue = tf.train.input_producer(
       filenames, num_epochs=num_epochs, shuffle=shuffle)
   reader = tf.TextLineReader(skip_header_lines=skip_header_lines)
 

@@ -3,11 +3,20 @@ Given a chess position as input, predict the most likely result of the game.
 
 **Results**
 
-Coming soon
+*Training 1*
 
+```
+Saving dict for global step 1: accuracy = 0.457, accuracy/baseline_label_mean = 0.53075, accuracy/threshold_0.500000_mean = 0.457, auc = 0.544542, auc_precision_recall = 0.524888, global_step = 1, labels/actual_label_mean = 0.53075, labels/prediction_mean = 0.635881, loss = 0.70696, precision/positive_threshold_0.500000_mean = 0.49425, recall/positive_threshold_0.500000_mean = 1.0
+```
+
+*Training 2*
+
+```
+Saving dict for global step 1000: accuracy = 0.69725, accuracy/baseline_label_mean = 0.551, accuracy/threshold_0.500000_mean = 0.69725, auc = 0.813933, auc_precision_recall = 0.823473, global_step = 1000, labels/actual_label_mean = 0.551, labels/prediction_mean = 0.536195, loss = 0.503131, precision/positive_threshold_0.500000_mean = 0.711462, recall/positive_threshold_0.500000_mean = 0.787938
+```
 
 *Predictions*
-```
+
 Coming soon.
 
 To achieve these results, I performed the following steps:

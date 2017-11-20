@@ -1,12 +1,7 @@
 # deepneuralnet-chess
 Given a chess position as input, predict the most likely result of the game.
 
-This branch is an attempt to use the Google Cloud Machine Learning Engine to train a model. The major differences between this branch and master are as follows:
-  1. tensorflow version 1.2 is required here, instead of tensorflow 1.4
-  2. argparse is used in task.py to specify important data that may change often
-  3. the model and task files are separate
-
-This is the branch I will be focusing most of my efforts on.
+This branch is an attempt to use the Google Cloud Machine Learning Engine to train a model.
 
 **Installation**
 
@@ -14,9 +9,43 @@ This is the branch I will be focusing most of my efforts on.
 pip install -r requirements.txt
 ```
 
+In addition to the dependencies, you will need to download the [Google Cloud SDK](https://cloud.google.com/sdk/) if you plan on running ` gcloud ` commands yourself.
+
+**Data**
+
+The data used to train the model was downloaded from [lichess.org](https://database.lichess.org/). We of course will need to process this data in a format that TensorFlow can understand.
+
+*Step 1*
+
+After downloading the dataset from lichess and decompressing it, we need to remove the unnecessary information such as player names, event names, time stamps, variations, comments, etc. The only information we want is the *final* position of the game. I used a tool called [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/) from the University of Kent to accomplish this.
+
+Simply execute
+
+```
+pgn-extract --nocomments --notags --novars --nomovenumbers -F -#500000,100 <filename.pgn>
+```
+
+This command will read through <filename.pgn>, remove the unnecessary data, and output new .pgn files of 500,000 games each, starting with name 1.pgn and incrementing until there are no more matches returned from the command.
+
+If you want to know more about the pgn-extract tool, the documentation can be found on the University of Kent's CS department website [here](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/help.html).
+
+Now each file looks like this...
+
+```
+e4 e5 Bc4 Nc6 Qh5 Nf6?? Qxf7# { "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq -" } 1-0
+```
+
+We can use python to extract the file position and result:
+
+```
+python process.py
+```
+
+The process.py script will go through each .pgn file in the working directory and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "processed-output.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
+
 **Training**
 
-Coming soon
+The model was trained on 97,364,461 chess positions. After training, the model achieved accuracy ` 0.7505 `.
 
 **Prediction**
 
@@ -24,28 +53,20 @@ Coming soon
 
 **Results**
 
-Given approximately 10,000,000 games as training data, the model has evaluation accuracy 45% on step 1. After 2,000 steps the model has accuracy 73.4%.
-
-*Step 1*
-```
-Saving dict for global step 1: accuracy = 0.457,
-accuracy/baseline_label_mean = 0.53075,
-accuracy/threshold_0.500000_mean = 0.457,
-auc = 0.54672,
-auc_precision_recall = 0.537762,
-global_step = 1,
-labels/actual_label_mean = 0.53075, labels/prediction_mean = 0.942805,
-loss = 1.367, precision/positive_threshold_0.500000_mean = 0.49425, recall/positive_threshold_0.500000_mean = 1.0
-```
-
-*Step 2000*
+*Step 1:*
 
 ```
-Saving dict for global step 2000: accuracy = 0.7345,
-accuracy/baseline_label_mean = 0.53075,
-accuracy/threshold_0.500000_mean = 0.7345,
-auc = 0.8568, auc_precision_recall = 0.854109,
-global_step = 2000,
-labels/actual_label_mean = 0.53075, labels/prediction_mean = 0.549272,
-loss = 0.46474, precision/positive_threshold_0.500000_mean = 0.722294, recall/positive_threshold_0.500000_mean = 0.847243
+Saving dict for global step 1: accuracy = 0.50825,
+accuracy/baseline_label_mean = 0.5455, accuracy/threshold_0.500000_mean = 0.50825,
+auc = 0.595211, auc_precision_recall = 0.593054, global_step = 1,
+labels/actual_label_mean = 0.5455, labels/prediction_mean = 0.556439, loss = 0.672039, precision/positive_threshold_0.500000_mean = 0.531124, recall/positive_threshold_0.500000_mean = 0.902989
+```
+
+*Step 3000:*
+
+```
+Saving dict for global step 3000: accuracy = 0.7505,
+accuracy/baseline_label_mean = 0.5455, accuracy/threshold_0.500000_mean = 0.7505,
+auc = 0.854234, auc_precision_recall = 0.85503, global_step = 3000,
+labels/actual_label_mean = 0.5455, labels/prediction_mean = 0.536037, loss = 0.434461, precision/positive_threshold_0.500000_mean = 0.764544, recall/positive_threshold_0.500000_mean = 0.817736
 ```

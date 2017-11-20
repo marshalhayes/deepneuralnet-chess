@@ -1,7 +1,7 @@
 # deepneuralnet-chess
 Given a chess position as input, predict the most likely result of the game.
 
-This branch is an attempt to use the Google Cloud Machine Learning Engine to train a model.
+This branch is an attempt to use TensorFlow and the Google Cloud Machine Learning Engine to train a model.
 
 **Installation**
 
@@ -19,7 +19,7 @@ The data used to train the model was downloaded from [lichess.org](https://datab
 
 After downloading the dataset from lichess and decompressing it, we need to remove the unnecessary information such as player names, event names, time stamps, variations, comments, etc. The only information we want is the *final* position of the game. I used a tool called [pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/) from the University of Kent to accomplish this.
 
-Simply execute
+Simply execute:
 
 ```
 pgn-extract --nocomments --notags --novars --nomovenumbers -F -#500000,100 <filename.pgn>
@@ -42,6 +42,12 @@ python process.py
 ```
 
 The process.py script will go through each .pgn file in the working directory and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "processed-output.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
+
+Individual .csv files can be created for each .pgn in the directory instead by using
+
+```
+python process-v2.py
+```
 
 **Training**
 

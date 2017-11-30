@@ -178,7 +178,7 @@ if __name__ == '__main__':
           eval_steps=args.eval_steps,
           export_strategies=[saved_model_export_utils.make_export_strategy(
               model.SERVING_FUNCTIONS[args.export_format],
-              exports_to_keep=1,
+              exports_to_keep=3,
               default_output_alternative_key=None,
           )]
       ),

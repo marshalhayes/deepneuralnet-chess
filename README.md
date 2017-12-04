@@ -56,10 +56,6 @@ python process-v2.py
 
 The model was trained on 97,364,461 chess positions. After training, the model achieved accuracy ` 0.7505 `.
 
-**Prediction**
-
-Coming soon
-
 **Results**
 
 *Step 1:*
@@ -78,10 +74,4 @@ Saving dict for global step 3000: accuracy = 0.7505,
 accuracy/baseline_label_mean = 0.5455, accuracy/threshold_0.500000_mean = 0.7505,
 auc = 0.854234, auc_precision_recall = 0.85503, global_step = 3000,
 labels/actual_label_mean = 0.5455, labels/prediction_mean = 0.536037, loss = 0.434461, precision/positive_threshold_0.500000_mean = 0.764544, recall/positive_threshold_0.500000_mean = 0.817736
-```
-
-You can download the trained model from my Google Cloud Storage Bucket through the [Google Cloud SDK](https://cloud.google.com/sdk/) ` gsutil ` command.
-
-```
-gsutil cp -r gs://dnn-chess-models/* <save_location>
 ```

@@ -2,8 +2,13 @@ import re
 import glob
 from tqdm import tqdm
 
-def main():
+def main(filenames=None):
+    if filenames == None:
+        print("No filenames specified. Please use -f to specify filenames to process.")
+        raise FileNotFoundError
+
     COLS_HEADERS = "a1,b1,c1,d1,e1,f1,g1,h1,a2,b2,c2,d2,e2,f2,g2,h2,a3,b3,c3,d3,e3,f3,g3,h3,a4,b4,c4,d4,e4,f4,g4,h4,a5,b5,c5,d5,e5,f5,g5,h5,a6,b6,c6,d6,e6,f6,g6,h6,a7,b7,c7,d7,e7,f7,g7,h7,a8,b8,c8,d8,e8,f8,g8,h8,whos_move,fen,result"
+
     # returns row vector corresponding to row fen string
     def vectorize_stripped_fen(fen_row_string):
         row_vector = []
@@ -20,10 +25,11 @@ def main():
         return sum(1 for line in open(filename))
 
     regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
-    outputfile = open("processed-output.csv",'wb')
-    outputfile.write(COLS_HEADERS + "\r\n")
 
-    for filename in glob.glob('*.pgn'):
+    for filename in filenames:
+        outputfile = open(filename + "_processed.csv",'wb')
+        outputfile.write(COLS_HEADERS + "\r\n")
+
         with open(filename) as f:
             for line in tqdm(f, ascii=True, desc=filename, total=get_num_lines(filename)):
                 match = re.search(regex, line)
@@ -40,4 +46,9 @@ def main():
                     outputfile.write(",".join(str(x) for x in position_vector) + "," + whosmove + "," + fen.replace('"', '') + "," + result.strip() + "\r\n")
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description='Process some PGN files.')
+    parser.add_argument("-f", "--file", nargs='+', dest="filenames",
+                        help="specify filename(s) to process", metavar="FILE")
+    args = parser.parse_args()
+    main(args.filenames)

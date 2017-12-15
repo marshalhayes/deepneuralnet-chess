@@ -44,7 +44,7 @@ We can use python to extract the position and result:
 python process.py --files $filenames
 ```
 
-The process.py script will go through each file in *filenames* and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "<filename>.pgn_processed.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
+The process.py script will go through each file in *filenames* and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "*filename*.pgn_processed.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
 
 
 **Training**

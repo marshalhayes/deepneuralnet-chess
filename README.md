@@ -38,23 +38,24 @@ Now each file looks like this...
 e4 e5 Bc4 Nc6 Qh5 Nf6?? Qxf7# { "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq -" } 1-0
 ```
 
-We can use python to extract the file position and result:
+We can use python to extract the position and result:
 
 ```
-python process.py
+python process.py --files $filenames
 ```
 
-The process.py script will go through each .pgn file in the working directory and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "processed-output.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
+The process.py script will go through each file in *filenames* and perform steps to extract the FEN position string and result from each game. A new file will be created in the working directory entitled "<filename>.pgn_processed.csv" which will contain 67 columns (64 squares, who's move it is, the position in FEN format, and the result of the game). Each row corresponds to one chess position.
 
-Individual .csv files can be created for each .pgn in the directory instead by using
-
-```
-python process-v2.py
-```
 
 **Training**
 
 The model was trained on 97,364,461 chess positions. After training, the model achieved accuracy ` 0.7505 `.
+
+To train the model on the Google Cloud Machine Learning engine, run something similar to the following command:
+
+```
+gcloud ml-engine jobs submit training $JOB_NAME --job-dir $OUTPUT_PATH --runtime-version 1.2 --module-name trainer.task --package-path trainer/ --region "us-central1" -- --train-files $PATH_TO_TRAIN_FILES --eval-files $PATH_TO_EVAL_FILES --train-steps 3000 --verbosity DEBUG
+```
 
 **Results**
 

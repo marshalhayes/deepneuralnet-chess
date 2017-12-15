@@ -1,5 +1,5 @@
 # deepneuralnet-chess
-Given a chess position as input, predict the most likely result of the game.
+Predict the most likely result of a chess game from a position without calculating any moves.
 
 This branch is an attempt to use TensorFlow and the Google Cloud Machine Learning Engine to train a model.
 

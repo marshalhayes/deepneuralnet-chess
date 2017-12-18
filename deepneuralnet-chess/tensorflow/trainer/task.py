@@ -170,6 +170,7 @@ if __name__ == '__main__':
   # learn_runner pulls configuration information from environment
   # variables using tf.learn.RunConfig and uses this configuration
   # to conditionally execute Experiment, or param server code
+
   learn_runner.run(
       generate_experiment_fn(
           min_eval_frequency=args.min_eval_frequency,
@@ -182,6 +183,6 @@ if __name__ == '__main__':
               default_output_alternative_key=None,
           )]
       ),
-      run_config=run_config.RunConfig(model_dir=args.job_dir),
+      run_config=run_config.RunConfig(model_dir=args.job_dir, save_checkpoints_steps=1000),
       hparams=hparam.HParams(**args.__dict__)
   )

@@ -1,5 +1,4 @@
 import re
-import glob
 from tqdm import tqdm
 
 def main(filenames=None):
@@ -27,7 +26,7 @@ def main(filenames=None):
     regex = r'(\{(.*?)\}\ ((1\-0)|(0\-1)|(1\/2\-1\/2)))'
 
     for filename in filenames:
-        outputfile = open(filename + "_processed.csv",'wb')
+        outputfile = open(filename + ".pgn_processed.csv",'wb')
         outputfile.write(COLS_HEADERS + "\r\n")
 
         with open(filename) as f:

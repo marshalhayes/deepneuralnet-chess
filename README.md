@@ -3,9 +3,6 @@ Predict the most likely result of a chess game from a position without calculati
 
 This branch is an attempt to use TensorFlow and the Google Cloud Machine Learning Engine to train a model.
 
-![](graph.png)
-![](projector.gif)
-
 **Installation**
 
 ```
